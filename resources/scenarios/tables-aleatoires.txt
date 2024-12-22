@@ -1,0 +1,61 @@
+Tables Aléatoires pour Scénarios
+
+1. Rencontres Urbaines (d20)
+---------------------------
+1-3: Pillards (2d6 membres)
+4-6: Survivants pacifiques (1d4)
+7-9: Drones de surveillance
+10-12: Mutants mineurs
+13-15: Marchands ambulants
+16-17: Patrouille de faction
+18-19: Bête mutante
+20: Événement unique
+
+2. Événements de Voyage (d12)
+----------------------------
+1: Tempête radioactive
+2: Panne mécanique
+3: Embuscade
+4: Découverte de ressources
+5: Voyageurs en détresse
+6: Point de contrôle
+7: Zone contaminée
+8: Phénomène étrange
+9: Refuge abandonné
+10: Signal de détresse
+11: Marché temporaire
+12: Anomalie temporelle
+
+3. Trésors Technologiques (d10)
+------------------------------
+1: Munitions spéciales
+2: Médikit avancé
+3: Module d'amélioration
+4: Outil multifonction
+5: Bouclier énergétique
+6: Scanner portable
+7: Nano-réparateur
+8: Communicateur longue portée
+9: Générateur portable
+10: Artefact mystérieux
+
+4. Complications de Mission (d8)
+------------------------------
+1: Trahison interne
+2: Défaillance d'équipement
+3: Changement d'objectif
+4: Limite de temps réduite
+5: Nouvelle faction hostile
+6: Catastrophe naturelle
+7: Infection/Contamination
+8: Perte de ressources
+
+5. Réactions PNJ (2d6)
+---------------------
+2: Hostile, attaque
+3-4: Méfiant, agressif
+5-6: Prudent, négociable
+7-8: Neutre
+9-10: Amical, coopératif
+11: Serviable
+12: Allié potentiel

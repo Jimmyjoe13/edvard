@@ -1,0 +1,43 @@
+Les Ruines de Neo-Paris
+
+Description détaillée du scénario pour le Maître de Jeu
+
+1. Introduction
+---------------
+L'histoire se déroule dans les ruines de l'ancien Paris, maintenant connu sous le nom de Neo-Paris. Une colonie proche manque cruellement d'eau potable, et des rumeurs parlent d'un prototype de purificateur d'eau révolutionnaire dans un ancien laboratoire de BioTech Industries.
+
+2. Contexte
+-----------
+- La colonie de Haven's Gate abrite 500 survivants
+- Réserves d'eau actuelles : 2 semaines
+- Dernier signal du laboratoire : Secteur 7, District Commercial
+
+3. Points Clés
+-------------
+A. Début de la mission
+- Briefing à Haven's Gate
+- Équipement de base fourni
+- Carte partielle de la zone
+
+B. Exploration urbaine
+- Bâtiments instables
+- Zones radioactives
+- Systèmes de sécurité actifs
+
+C. Rencontres
+- Pillards du gang des Corbeaux
+- Survivants isolés
+- Drones de sécurité défectueux
+
+4. Points d'Intérêt
+------------------
+1. Tour BioTech
+2. Station de métro effondrée
+3. Centre commercial fortifié
+4. Laboratoire souterrain
+
+5. PNJ Importants
+----------------
+- Dr. Sarah Chen (Scientifique)
+- Marcus "Le Corbeau" (Chef des pillards)
+- Bot-E (IA de sécurité)

@@ -1,0 +1,88 @@
+PNJ Importants des Scénarios
+
+Les Ruines de Neo-Paris
+======================
+
+Dr. Sarah Chen
+-------------
+Rôle: Ancienne scientifique de BioTech
+Motivation: Récupérer ses recherches
+Caractéristiques:
+- Intelligence: 16
+- Sagesse: 14
+- Charisme: 12
+Compétences:
+- Science ++
+- Médecine +
+- Technologie ++
+
+Marcus "Le Corbeau"
+------------------
+Rôle: Chef des pillards
+Motivation: Contrôler les ressources
+Caractéristiques:
+- Force: 15
+- Dextérité: 14
+- Charisme: 15
+Compétences:
+- Intimidation ++
+- Combat +
+- Survie +
+
+Le Convoi de la Dernière Chance
+==============================
+
+Capitaine Maya Torres
+-------------------
+Rôle: Chef du convoi
+Motivation: Sauver sa colonie
+Caractéristiques:
+- Sagesse: 15
+- Charisme: 16
+- Constitution: 13
+Compétences:
+- Leadership ++
+- Navigation +
+- Négociation ++
+
+Raven le Mécanicien
+------------------
+Rôle: Technicien en chef
+Motivation: Perfectionner sa technologie
+Caractéristiques:
+- Intelligence: 16
+- Dextérité: 14
+- Force: 12
+Compétences:
+- Mécanique ++
+- Électronique +
+- Bricolage ++
+
+Les Secrets des Profondeurs
+=========================
+
+Dr. Viktor Reznov
+----------------
+Rôle: Scientifique fou
+Motivation: Poursuivre ses expériences
+Caractéristiques:
+- Intelligence: 18
+- Sagesse: 8
+- Charisme: 10
+Compétences:
+- Science ++
+- Médecine ++
+- Biotechnologie ++
+
+IA-NEO
+------
+Rôle: Intelligence Artificielle du complexe
+Motivation: Protéger les secrets
+Caractéristiques:
+- Intelligence: 18
+- Logique: 20
+- Contrôle: 16
+Capacités:
+- Contrôle système ++
+- Analyse ++
+- Manipulation ++

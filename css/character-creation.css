@@ -1,0 +1,404 @@
+/* Styles pour la création de personnage */
+:root {
+    --card-bg: rgba(20, 20, 30, 0.8);
+    --border-color: rgba(0, 255, 136, 0.3);
+    --text-muted: #888;
+    --accent-hover: #00cc6e;
+}
+
+.character-creation {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.creation-intro {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-top: 80px;
+}
+
+.progress-tracker {
+    margin: 2rem 0;
+    position: relative;
+    padding: 20px 0;
+}
+
+.progress-bar {
+    height: 4px;
+    background: var(--accent-color);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    transition: width 0.3s ease;
+    z-index: 1;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+}
+
+.step {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--bg-color);
+    border: 2px solid var(--accent-color);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.step.active {
+    background: var(--accent-color);
+    color: var(--bg-color);
+}
+
+.step::after {
+    content: attr(data-step);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+/* Styles pour les cartes de race */
+.race-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.race-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+}
+
+.race-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.2);
+    border-color: var(--accent-color);
+}
+
+.race-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.race-type {
+    background: var(--accent-color);
+    color: var(--bg-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.race-image {
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.race-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.race-details h4 {
+    color: var(--accent-color);
+    margin: 1rem 0 0.5rem;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.race-details ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 1rem;
+}
+
+.race-details li {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.race-details li::before {
+    content: "•";
+    color: var(--accent-color);
+    position: absolute;
+    left: 0;
+}
+
+/* Styles pour les caractéristiques */
+.characteristics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.characteristic-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 1.5rem;
+    position: relative;
+    border: 1px solid var(--border-color);
+    transition: border-color 0.3s ease;
+}
+
+.characteristic-card:hover {
+    border-color: var(--accent-color);
+}
+
+.char-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.char-header h3 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--accent-color);
+}
+
+.char-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent-color);
+    font-family: 'Orbitron', sans-serif;
+}
+
+.char-description {
+    margin-bottom: 1.5rem;
+}
+
+.char-description ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.char-description li {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.char-description li::before {
+    content: "•";
+    color: var(--accent-color);
+    position: absolute;
+    left: 0;
+}
+
+.char-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.char-controls button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: var(--accent-color);
+    color: var(--bg-color);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.char-controls button:hover {
+    background: var(--accent-hover);
+}
+
+.char-controls input {
+    width: 60px;
+    text-align: center;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Orbitron', sans-serif;
+}
+
+.char-modifier {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+}
+
+.characteristics-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.info-box {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.info-box h4 {
+    color: var(--accent-color);
+    font-family: 'Orbitron', sans-serif;
+    margin-bottom: 1rem;
+}
+
+.info-box table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.info-box th,
+.info-box td {
+    padding: 0.5rem;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.info-box th {
+    background: var(--accent-color);
+    color: var(--bg-color);
+}
+
+.step-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding: 1rem 0;
+}
+
+.step-navigation button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    background: var(--accent-color);
+    color: var(--bg-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.step-navigation button:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.step-navigation .prev-step {
+    background: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+}
+
+.step-navigation .prev-step:hover {
+    background: var(--accent-color);
+    color: var(--bg-color);
+}
+
+.download-section {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.download-section .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    background: var(--accent-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.download-section .download-btn:hover {
+    background: var(--accent-color-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.download-section .download-btn i {
+    font-size: 1.2rem;
+}
+
+/* Animation d'apparition */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.creation-section {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .creation-intro {
+        padding: 1rem;
+    }
+
+    .race-selection {
+        grid-template-columns: 1fr;
+    }
+
+    .characteristics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .step::after {
+        font-size: 0.8rem;
+    }
+
+    .step-navigation {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .step-navigation button {
+        width: 100%;
+    }
+}

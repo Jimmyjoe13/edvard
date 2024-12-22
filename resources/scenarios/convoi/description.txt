@@ -1,0 +1,45 @@
+Le Convoi de la Dernière Chance
+
+Guide du Maître de Jeu
+
+1. Synopsis
+-----------
+Un convoi médical crucial doit traverser les terres désolées pour atteindre plusieurs colonies isolées. Les joueurs doivent protéger le convoi tout en gérant les ressources et en négociant avec diverses factions.
+
+2. Structure du Convoi
+---------------------
+- 3 véhicules principaux
+- 1 véhicule de reconnaissance
+- Équipe médicale (4 PNJ)
+- Cargaison vitale
+
+3. Étapes du Voyage
+------------------
+A. Départ de la Citadelle
+- Préparation
+- Recrutement d'escorte
+- Vérification des véhicules
+
+B. Traversée du Désert Rouge
+- Points de ravitaillement
+- Zones radioactives
+- Tempêtes de sable
+
+C. Territoire des Raiders
+- Négociations possibles
+- Points d'embuscade
+- Routes alternatives
+
+4. Factions Rencontrées
+----------------------
+1. Les Nomades du Désert
+2. Raiders Motorisés
+3. Colons Indépendants
+4. Marchands Itinérants
+
+5. Événements Aléatoires
+-----------------------
+- Pannes mécaniques
+- Rencontres imprévues
+- Phénomènes météorologiques
+- Découvertes fortuites
