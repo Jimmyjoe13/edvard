@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Règles - Edvard RPG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="images/logo-edvard.jpg" alt="Logo Projet Edvard">
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="univers-lore.html">Univers & Lore</a></li>
+                <li><a href="regles.html" class="active">Règles</a></li>
+                <li><a href="creation-personnage.html">Création de Personnage</a></li>
+                <li><a href="bestiaire.html">Bestiaire</a></li>
+                <li><a href="equipement.html">Équipement</a></li>
+                <li><a href="scenarios.html">Scénarios</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="rules-intro">
+            <h1>Règles du Jeu</h1>
+            <p class="intro-text">Découvrez les mécaniques qui régissent l'univers d'Edvard.</p>
+        </section>
+
+        <div class="rules-container">
+            <section class="rules-section" id="bases">
+                <h2><span class="step-number">1</span> Principes de Base</h2>
+                <div class="rules-content">
+                    <div class="rule-card">
+                        <h3>Le Jet de Dés</h3>
+                        <p>Les actions sont résolues avec 2d10 + modificateurs. Le niveau de difficulté est défini par le MJ :</p>
+                        <ul class="difficulty-list">
+                            <li>Facile : 10</li>
+                            <li>Moyen : 15</li>
+                            <li>Difficile : 20</li>
+                            <li>Très Difficile : 25</li>
+                            <li>Héroïque : 30</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="rule-card">
+                        <h3>Les Actions</h3>
+                        <p>Durant son tour, un personnage peut effectuer :</p>
+                        <ul>
+                            <li>1 Action Principale</li>
+                            <li>1 Action de Mouvement</li>
+                            <li>1 Action Bonus</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="rules-section" id="combat">
+                <h2><span class="step-number">2</span> Système de Combat</h2>
+                <div class="rules-content">
+                    <div class="rule-card">
+                        <h3>Initiative</h3>
+                        <p>Au début du combat :</p>
+                        <ul>
+                            <li>Jet d'Agilité + 1d10</li>
+                            <li>Les actions se déroulent du plus haut au plus bas score</li>
+                            <li>En cas d'égalité, l'Agilité la plus élevée l'emporte</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-card">
+                        <h3>Attaques</h3>
+                        <p>Pour toucher une cible :</p>
+                        <ul>
+                            <li>2d10 + Compétence d'arme</li>
+                            <li>Contre la Défense de la cible</li>
+                            <li>Les bonus/malus situationnels s'appliquent</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-card">
+                        <h3>Dégâts</h3>
+                        <p>Les dégâts sont calculés ainsi :</p>
+                        <ul>
+                            <li>Dégâts de l'arme + modificateurs</li>
+                            <li>Réduits par l'armure/protection</li>
+                            <li>Les effets critiques s'appliquent sur un 20 naturel</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="rules-section" id="competences">
+                <h2><span class="step-number">3</span> Tests de Compétences</h2>
+                <div class="rules-content">
+                    <div class="rule-card">
+                        <h3>Structure d'un Test</h3>
+                        <p>2d10 + Caractéristique + Compétence ≥ Difficulté</p>
+                        <ul>
+                            <li>Succès critique sur double 10</li>
+                            <li>Échec critique sur double 1</li>
+                            <li>Avantage/Désavantage : lancer 3d10, garder les 2 meilleurs/pires</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-card">
+                        <h3>Synergie</h3>
+                        <p>Bonus de synergie possibles :</p>
+                        <ul>
+                            <li>+2 avec une compétence connexe</li>
+                            <li>+2 avec un équipement adapté</li>
+                            <li>+2 avec une aide extérieure</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="rules-section" id="technologie">
+                <h2><span class="step-number">4</span> Technologie et Équipement</h2>
+                <div class="rules-content">
+                    <div class="rule-card">
+                        <h3>Implants Cybernétiques</h3>
+                        <p>Règles d'utilisation des implants :</p>
+                        <ul>
+                            <li>Maximum de 3 implants actifs</li>
+                            <li>Nécessite une action pour activer/désactiver</li>
+                            <li>Consomme de l'énergie en utilisation</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-card">
+                        <h3>Piratage</h3>
+                        <p>Processus de piratage :</p>
+                        <ul>
+                            <li>Test d'Intelligence + Technologie</li>
+                            <li>Contre-mesures automatiques</li>
+                            <li>Temps limité selon la complexité</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="rules-section" id="experience">
+                <h2><span class="step-number">5</span> Progression</h2>
+                <div class="rules-content">
+                    <div class="rule-card">
+                        <h3>Points d'Expérience</h3>
+                        <p>Gain de points selon les actions :</p>
+                        <ul>
+                            <li>Combats : 1-5 points</li>
+                            <li>Roleplay : 1-3 points</li>
+                            <li>Objectifs : 3-5 points</li>
+                        </ul>
+                    </div>
+
+                    <div class="rule-card">
+                        <h3>Amélioration</h3>
+                        <p>Coûts en points d'expérience :</p>
+                        <ul>
+                            <li>Nouvelle compétence : 5 points</li>
+                            <li>Amélioration de caractéristique : 10 points</li>
+                            <li>Nouveau talent : 8 points</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Edvard RPG. Tous droits réservés.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

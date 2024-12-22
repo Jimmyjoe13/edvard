@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestiaire - Projet Edvard</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/bestiaire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="images/logo-edvard.jpg" alt="Logo Projet Edvard">
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="univers-lore.html">Univers & Lore</a></li>
+                <li><a href="regles.html">Règles</a></li>
+                <li><a href="creation-personnage.html">Création de Personnage</a></li>
+                <li><a href="bestiaire.html" class="active">Bestiaire</a></li>
+                <li><a href="equipement.html">Équipement</a></li>
+                <li><a href="scenarios.html">Scénarios</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="bestiaire">
+        <section class="bestiaire-intro">
+            <h1>Bestiaire</h1>
+            <p class="intro-text">Découvrez les créatures qui peuplent l'univers d'Edvard, des plus communes aux plus redoutables.</p>
+            
+            <div class="bestiary-controls">
+                <div class="search-and-filters">
+                    <div class="filter-group">
+                        <label for="creature-search">Rechercher :</label>
+                        <input type="text" id="creature-search" placeholder="Nom de la créature...">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="type-filter">Type :</label>
+                        <select id="type-filter">
+                            <option value="all">Tous les types</option>
+                            <option value="synthétique">Synthétique</option>
+                            <option value="organique">Organique</option>
+                            <option value="hybride">Hybride</option>
+                            <option value="éthérée">Éthérée</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="level-filter">Niveau :</label>
+                        <select id="level-filter">
+                            <option value="all">Tous les niveaux</option>
+                            <option value="1-5">Niveau 1-5</option>
+                            <option value="6-10">Niveau 6-10</option>
+                            <option value="11-15">Niveau 11-15</option>
+                            <option value="16-20">Niveau 16-20</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="habitat-filter">Habitat :</label>
+                        <select id="habitat-filter">
+                            <option value="all">Tous les habitats</option>
+                            <option value="station">Station</option>
+                            <option value="planete">Planète</option>
+                            <option value="ruines">Ruines</option>
+                            <option value="espace">Espace</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="view-controls">
+                    <div class="sort-group">
+                        <label for="sort-creatures">Trier par :</label>
+                        <select id="sort-creatures">
+                            <option value="name">Nom</option>
+                            <option value="level">Niveau</option>
+                            <option value="type">Type</option>
+                        </select>
+                    </div>
+
+                    <div id="view-toggle" class="view-toggle">
+                        <button data-view="grid" title="Vue grille">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button data-view="list" title="Vue liste">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="active-filters"></div>
+            </div>
+        </section>
+
+        <section class="bestiary-content">
+            <div class="creature-card" data-id="rodeur-mutant" data-type="organique" data-level="5" data-habitat="ruines">
+                <div class="creature-header">
+                    <button class="favorite-btn" title="Ajouter aux favoris">
+                        <i class="far fa-star"></i>
+                    </button>
+                    <h3>Rôdeur Mutant</h3>
+                    <span class="creature-type">Humanoïde Mutant</span>
+                </div>
+                <div class="creature-stats">
+                    <div class="stat-group">
+                        <h4>Caractéristiques</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Force</span>
+                                <span>14 (+2)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Dextérité</span>
+                                <span>12 (+1)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Constitution</span>
+                                <span>16 (+3)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Intelligence</span>
+                                <span>8 (-1)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Sagesse</span>
+                                <span>10 (+0)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Charisme</span>
+                                <span>6 (-2)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="stat-group">
+                        <h4>Combat</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Points de Vie</span>
+                                <span>45 (6d8 + 18)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Classe d'Armure</span>
+                                <span>13</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Initiative</span>
+                                <span>+1</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Vitesse</span>
+                                <span>9m</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="stat-group">
+                        <h4>Résistances</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Radiation</span>
+                                <span>Immunité</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Poison</span>
+                                <span>Avantage</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Maladie</span>
+                                <span>Résistant</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="creature-abilities">
+                    <div class="ability">
+                        <h4>Mutation Adaptative</h4>
+                        <p>Une fois par jour, le Rôdeur peut adapter son corps aux dégâts reçus, gagnant une résistance temporaire au dernier type de dégâts subi pendant 1 heure.</p>
+                    </div>
+                    <div class="ability">
+                        <h4>Rage Mutante</h4>
+                        <p>Quand ses PV tombent sous 50%, le Rôdeur entre en rage, gagnant +2 aux jets d'attaque et de dégâts.</p>
+                    </div>
+                </div>
+                <div class="creature-description">
+                    <p>Les Rôdeurs Mutants sont d'anciens humains transformés par les radiations. Ils conservent une intelligence primitive mais sont guidés par des instincts bestiaux. On les trouve souvent dans les ruines des anciennes villes.</p>
+                    <div class="danger-level">
+                        <span>Niveau de Danger:</span>
+                        <div class="danger-dots">
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot"></span>
+                            <span class="danger-dot"></span>
+                        </div>
+                    </div>
+                    <div class="creature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-fist-raised"></i>
+                            <span class="stat-label">Attaque:</span>
+                            <span class="stat-value">7</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-burst"></i>
+                            <span class="stat-label">Dégâts:</span>
+                            <span class="stat-value">2d6+3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="creature-card" data-id="chasseur-mecanique" data-type="synthétique" data-level="10" data-habitat="station">
+                <div class="creature-header">
+                    <button class="favorite-btn" title="Ajouter aux favoris">
+                        <i class="far fa-star"></i>
+                    </button>
+                    <h3>Chasseur Mécanique</h3>
+                    <span class="creature-type">Robot Autonome</span>
+                </div>
+                <div class="creature-stats">
+                    <div class="stat-group">
+                        <h4>Caractéristiques</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Force</span>
+                                <span>16 (+3)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Dextérité</span>
+                                <span>14 (+2)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Constitution</span>
+                                <span>18 (+4)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Intelligence</span>
+                                <span>12 (+1)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Sagesse</span>
+                                <span>10 (+0)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Charisme</span>
+                                <span>6 (-2)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="stat-group">
+                        <h4>Combat</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Points de Vie</span>
+                                <span>65 (8d8 + 32)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Classe d'Armure</span>
+                                <span>16</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Initiative</span>
+                                <span>+2</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Vitesse</span>
+                                <span>12m</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="stat-group">
+                        <h4>Résistances</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Physique</span>
+                                <span>Résistant</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Énergie</span>
+                                <span>Vulnérable</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>PEM</span>
+                                <span>Vulnérable</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="creature-abilities">
+                    <div class="ability">
+                        <h4>Systèmes de Ciblage Avancés</h4>
+                        <p>Le Chasseur Mécanique a l'avantage aux jets d'attaque contre les cibles qu'il a déjà touchées ce tour.</p>
+                    </div>
+                    <div class="ability">
+                        <h4>Protocole d'Auto-Réparation</h4>
+                        <p>Au début de son tour, le Chasseur récupère 5 PV si ses points de vie sont inférieurs à la moitié de son maximum.</p>
+                    </div>
+                </div>
+                <div class="creature-description">
+                    <p>Les Chasseurs Mécaniques sont des robots de combat autonomes créés avant l'apocalypse. Leurs systèmes de ciblage sophistiqués en font des adversaires redoutables, mais ils sont vulnérables aux attaques électromagnétiques.</p>
+                    <div class="danger-level">
+                        <span>Niveau de Danger:</span>
+                        <div class="danger-dots">
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot"></span>
+                            <span class="danger-dot"></span>
+                        </div>
+                    </div>
+                    <div class="creature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-fist-raised"></i>
+                            <span class="stat-label">Attaque:</span>
+                            <span class="stat-value">12</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-burst"></i>
+                            <span class="stat-label">Dégâts:</span>
+                            <span class="stat-value">3d8+5</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="creature-card" data-id="bete-des-abysses" data-type="organique" data-level="15" data-habitat="ruines">
+                <div class="creature-header">
+                    <button class="favorite-btn" title="Ajouter aux favoris">
+                        <i class="far fa-star"></i>
+                    </button>
+                    <h3>Bête des Abysses</h3>
+                    <span class="creature-type">Aberration</span>
+                </div>
+                <div class="creature-stats">
+                    <div class="stat-group">
+                        <h4>Caractéristiques</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Force</span>
+                                <span>20 (+5)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Dextérité</span>
+                                <span>16 (+3)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Constitution</span>
+                                <span>22 (+6)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Intelligence</span>
+                                <span>14 (+2)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Sagesse</span>
+                                <span>12 (+1)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Charisme</span>
+                                <span>8 (-1)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="stat-group">
+                        <h4>Combat</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Points de Vie</span>
+                                <span>120 (12d12 + 72)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Classe d'Armure</span>
+                                <span>18</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Initiative</span>
+                                <span>+3</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Vitesse</span>
+                                <span>15m</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="stat-group">
+                        <h4>Résistances</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Psychique</span>
+                                <span>Immunité</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Radiation</span>
+                                <span>Immunité</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Physique</span>
+                                <span>Résistant</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="creature-abilities">
+                    <div class="ability">
+                        <h4>Aura de Terreur</h4>
+                        <p>Au début de chaque tour de la Bête, toute créature dans un rayon de 9m doit réussir un jet de Sagesse (DD 15) ou être effrayée pendant 1 minute.</p>
+                    </div>
+                    <div class="ability">
+                        <h4>Régénération Abyssale</h4>
+                        <p>La Bête récupère 10 PV au début de son tour tant qu'elle n'est pas exposée à la lumière du soleil.</p>
+                    </div>
+                    <div class="ability">
+                        <h4>Attaques Multiples</h4>
+                        <p>La Bête peut effectuer trois attaques par tour : deux avec ses griffes (2d8+5 dégâts tranchants) et une avec sa morsure (3d10+5 dégâts perforants).</p>
+                    </div>
+                </div>
+                <div class="creature-description">
+                    <p>La Bête des Abysses est une créature cauchemardesque née des expériences les plus sombres de l'ancien monde. Elle hante les profondeurs des installations abandonnées et se nourrit de la peur autant que de la chair de ses victimes.</p>
+                    <div class="danger-level">
+                        <span>Niveau de Danger:</span>
+                        <div class="danger-dots">
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot"></span>
+                        </div>
+                    </div>
+                    <div class="creature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-fist-raised"></i>
+                            <span class="stat-label">Attaque:</span>
+                            <span class="stat-value">15</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-burst"></i>
+                            <span class="stat-label">Dégâts:</span>
+                            <span class="stat-value">4d10+8</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="creature-card" data-id="echo-spectre" data-type="éthérée" data-level="15" data-habitat="station">
+                <div class="creature-header">
+                    <button class="favorite-btn" title="Ajouter aux favoris">
+                        <i class="far fa-star"></i>
+                    </button>
+                    <h3>Écho-Spectre</h3>
+                    <span class="creature-type">Entité Psychique</span>
+                </div>
+                <div class="creature-stats">
+                    <div class="stat-group">
+                        <h4>Caractéristiques</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Force</span>
+                                <span>8 (-1)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Dextérité</span>
+                                <span>18 (+4)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Constitution</span>
+                                <span>12 (+1)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Intelligence</span>
+                                <span>20 (+5)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Sagesse</span>
+                                <span>16 (+3)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Charisme</span>
+                                <span>18 (+4)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="stat-group">
+                        <h4>Combat</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Points de Vie</span>
+                                <span>85 (10d8 + 40)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Classe d'Armure</span>
+                                <span>16 (Armure psychique)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Initiative</span>
+                                <span>+4</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Vitesse</span>
+                                <span>Vol 12m</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="stat-group">
+                        <h4>Résistances</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Psychique</span>
+                                <span>Immunité</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Non-magique</span>
+                                <span>Résistant</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Technologie</span>
+                                <span>Vulnérable</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="creature-abilities">
+                    <div class="ability">
+                        <h4>Résonance Mnémonique</h4>
+                        <p>L'Écho-Spectre peut lire les souvenirs récents des créatures dans un rayon de 10m. Les cibles doivent réussir un jet de sauvegarde de Sagesse (DD 16) ou partager involontairement leurs souvenirs.</p>
+                    </div>
+                    <div class="ability">
+                        <h4>Forme Éthérée</h4>
+                        <p>Peut traverser les murs et les objets solides, mais doit terminer son tour dans un espace inoccupé.</p>
+                    </div>
+                    <div class="ability">
+                        <h4>Distorsion Temporelle</h4>
+                        <p>Une fois par jour, peut ralentir le temps dans une zone de 6m. Les créatures affectées voient leur vitesse réduite de moitié et subissent un désavantage aux jets de Dextérité.</p>
+                    </div>
+                </div>
+                <div class="creature-description">
+                    <p>Les Écho-Spectres sont des entités nées des traumatismes psychiques collectifs de l'apocalypse. Ils se nourrissent des souvenirs et des émotions, créant des distorsions dans la réalité autour d'eux.</p>
+                    <div class="danger-level">
+                        <span>Niveau de Danger:</span>
+                        <div class="danger-dots">
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot"></span>
+                        </div>
+                    </div>
+                    <div class="creature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-fist-raised"></i>
+                            <span class="stat-label">Attaque:</span>
+                            <span class="stat-value">14</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-burst"></i>
+                            <span class="stat-label">Dégâts:</span>
+                            <span class="stat-value">3d12+6</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="creature-card" data-id="nano-essaim-predateur" data-type="synthétique" data-level="10" data-habitat="station">
+                <div class="creature-header">
+                    <button class="favorite-btn" title="Ajouter aux favoris">
+                        <i class="far fa-star"></i>
+                    </button>
+                    <h3>Nano-Essaim Prédateur</h3>
+                    <span class="creature-type">Nuée Technologique</span>
+                </div>
+                <div class="creature-stats">
+                    <div class="stat-group">
+                        <h4>Caractéristiques</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Force</span>
+                                <span>6 (-2)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Dextérité</span>
+                                <span>22 (+6)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Constitution</span>
+                                <span>14 (+2)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Intelligence</span>
+                                <span>16 (+3)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Sagesse</span>
+                                <span>12 (+1)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Charisme</span>
+                                <span>8 (-1)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="stat-group">
+                        <h4>Combat</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Points de Vie</span>
+                                <span>95 (14d6 + 42)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Classe d'Armure</span>
+                                <span>18</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Initiative</span>
+                                <span>+6</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Vitesse</span>
+                                <span>12m, vol 9m</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="stat-group">
+                        <h4>Résistances</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Physique</span>
+                                <span>Résistant</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>PEM</span>
+                                <span>Vulnérable</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Acide</span>
+                                <span>Immunité</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="creature-abilities">
+                    <div class="ability">
+                        <h4>Forme de Nuée</h4>
+                        <p>Peut occuper l'espace d'autres créatures et passer à travers des ouvertures d'au moins 1cm. Résistant aux dégâts non-zonaux.</p>
+                    </div>
+                    <div class="ability">
+                        <h4>Assimilation Technologique</h4>
+                        <p>Peut absorber la technologie pour se régénérer. Récupère 2d8 PV en consumant un objet technologique.</p>
+                    </div>
+                    <div class="ability">
+                        <h4>Infection Systémique</h4>
+                        <p>Les créatures cybernétiques touchées doivent réussir un jet de Constitution DD 15 ou être "infectées", subissant 2d6 dégâts par tour pendant 3 tours.</p>
+                    </div>
+                </div>
+                <div class="creature-description">
+                    <p>Les Nano-Essaims Prédateurs sont des colonies de nanomachines devenues autonomes et hostiles. Ils se reproduisent en consommant la technologie et peuvent infecter les systèmes cybernétiques.</p>
+                    <div class="danger-level">
+                        <span>Niveau de Danger:</span>
+                        <div class="danger-dots">
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot"></span>
+                            <span class="danger-dot"></span>
+                        </div>
+                    </div>
+                    <div class="creature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-fist-raised"></i>
+                            <span class="stat-label">Attaque:</span>
+                            <span class="stat-value">11</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-burst"></i>
+                            <span class="stat-label">Dégâts:</span>
+                            <span class="stat-value">2d8+4</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="creature-card" data-id="chimere-quantique" data-type="éthérée" data-level="20" data-habitat="espace">
+                <div class="creature-header">
+                    <button class="favorite-btn" title="Ajouter aux favoris">
+                        <i class="far fa-star"></i>
+                    </button>
+                    <h3>Chimère Quantique</h3>
+                    <span class="creature-type">Anomalie Dimensionnelle</span>
+                </div>
+                <div class="creature-stats">
+                    <div class="stat-group">
+                        <h4>Caractéristiques</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Force</span>
+                                <span>Variable (1d20)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Dextérité</span>
+                                <span>Variable (1d20)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Constitution</span>
+                                <span>20 (+5)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Intelligence</span>
+                                <span>18 (+4)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Sagesse</span>
+                                <span>16 (+3)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Charisme</span>
+                                <span>14 (+2)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="stat-group">
+                        <h4>Combat</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Points de Vie</span>
+                                <span>150 (15d10 + 75)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Classe d'Armure</span>
+                                <span>Variable (10 + 1d8)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Initiative</span>
+                                <span>Variable (1d6)</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Vitesse</span>
+                                <span>Téléportation 15m</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="stat-group">
+                        <h4>Résistances</h4>
+                        <ul class="stat-list">
+                            <li class="stat-item">
+                                <span>Tous les types</span>
+                                <span>Variable</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Temporel</span>
+                                <span>Immunité</span>
+                            </li>
+                            <li class="stat-item">
+                                <span>Réalité</span>
+                                <span>Immunité</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="creature-abilities">
+                    <div class="ability">
+                        <h4>Superposition Quantique</h4>
+                        <p>Au début de chaque tour, lance 1d4. La Chimère existe simultanément dans autant de réalités alternatives, pouvant agir dans chacune d'elles.</p>
+                    </div>
+                    <div class="ability">
+                        <h4>Mutation Probabiliste</h4>
+                        <p>À chaque tour, une caractéristique aléatoire change de valeur (1d20). Les attaques et dégâts s'adaptent en conséquence.</p>
+                    </div>
+                    <div class="ability">
+                        <h4>Paradoxe Temporel</h4>
+                        <p>Peut "annuler" une action qui vient de se produire en créant un paradoxe temporel (1 fois par combat). L'action est effacée de la réalité.</p>
+                    </div>
+                </div>
+                <div class="creature-description">
+                    <p>La Chimère Quantique est une anomalie née d'expériences sur la mécanique quantique qui ont mal tourné. Elle existe simultanément dans plusieurs réalités, rendant ses actions et capacités hautement imprévisibles.</p>
+                    <div class="danger-level">
+                        <span>Niveau de Danger:</span>
+                        <div class="danger-dots">
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                            <span class="danger-dot active"></span>
+                        </div>
+                    </div>
+                    <div class="creature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-fist-raised"></i>
+                            <span class="stat-label">Attaque:</span>
+                            <span class="stat-value">20</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-burst"></i>
+                            <span class="stat-label">Dégâts:</span>
+                            <span class="stat-value">5d12+10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nouvelle section pour les PNJ -->
+        <section class="npc-section">
+            <h2>PNJ Importants</h2>
+            <p class="section-intro">Les personnages non-joueurs qui façonnent le monde d'Edvard.</p>
+
+            <div class="npc-grid">
+                <div class="npc-card" data-faction="resistance">
+                    <div class="npc-header">
+                        <h3>Dr. Elena Volkov</h3>
+                        <span class="npc-title">Directrice de la Résistance Technologique</span>
+                    </div>
+                    <div class="npc-portrait">
+                        <img src="images/dr-elena.webp" alt="Dr. Elena Volkov">
+                    </div>
+                    <div class="npc-stats">
+                        <div class="stat-block">
+                            <h4>Profil</h4>
+                            <ul>
+                                <li><strong>Âge:</strong> 45 ans</li>
+                                <li><strong>Spécialisation:</strong> Bio-Ingénieur</li>
+                                <li><strong>Niveau:</strong> 15</li>
+                            </ul>
+                        </div>
+                        <div class="stat-block">
+                            <h4>Caractéristiques Notables</h4>
+                            <ul>
+                                <li><strong>Intelligence:</strong> 18 (+4)</li>
+                                <li><strong>Sagesse:</strong> 16 (+3)</li>
+                                <li><strong>Charisme:</strong> 15 (+2)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="npc-description">
+                        <p>Ancienne directrice de recherche chez MegaTech, Elena a déserté lorsqu'elle a découvert les expériences non éthiques de l'entreprise. Elle dirige maintenant la Résistance, utilisant ses connaissances pour combattre son ancien employeur.</p>
+                    </div>
+                    <div class="npc-traits">
+                        <div class="trait">
+                            <h4>Motivations</h4>
+                            <p>Protéger l'humanité des dangers de la technologie non régulée et exposer les méfaits des mégacorporations.</p>
+                        </div>
+                        <div class="trait">
+                            <h4>Secrets</h4>
+                            <p>Elena cache sa participation passée à la création du virus cybernétique qui a causé la Grande Purge.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="npc-card" data-faction="megatech">
+                    <div class="npc-header">
+                        <h3>Marcus Chen</h3>
+                        <span class="npc-title">PDG de MegaTech Industries</span>
+                    </div>
+                    <div class="npc-portrait">
+                        <img src="images/marcus-chen.jpeg" alt="Marcus Chen">
+                    </div>
+                    <div class="npc-stats">
+                        <div class="stat-block">
+                            <h4>Profil</h4>
+                            <ul>
+                                <li><strong>Âge:</strong> 52 ans</li>
+                                <li><strong>Spécialisation:</strong> Techno-Mage</li>
+                                <li><strong>Niveau:</strong> 18</li>
+                            </ul>
+                        </div>
+                        <div class="stat-block">
+                            <h4>Caractéristiques Notables</h4>
+                            <ul>
+                                <li><strong>Intelligence:</strong> 20 (+5)</li>
+                                <li><strong>Charisme:</strong> 18 (+4)</li>
+                                <li><strong>Sagesse:</strong> 14 (+2)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="npc-description">
+                        <p>Visionnaire impitoyable, Marcus Chen a transformé MegaTech en leader mondial de la cybernétique avancée. Son corps est augmenté à 80% par des implants expérimentaux, faisant de lui un hybride entre homme et machine.</p>
+                    </div>
+                    <div class="npc-traits">
+                        <div class="trait">
+                            <h4>Motivations</h4>
+                            <p>Transcender les limites de l'humanité par la fusion totale avec la technologie.</p>
+                        </div>
+                        <div class="trait">
+                            <h4>Secrets</h4>
+                            <p>Son corps rejette lentement ses implants, le conduisant à des recherches de plus en plus désespérées.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="npc-card" data-faction="underground">
+                    <div class="npc-header">
+                        <h3>Shadow</h3>
+                        <span class="npc-title">Légende du Réseau Clandestin</span>
+                    </div>
+                    <div class="npc-portrait">
+                        <img src="images/shadow.jpeg" alt="Shadow">
+                    </div>
+                    <div class="npc-stats">
+                        <div class="stat-block">
+                            <h4>Profil</h4>
+                            <ul>
+                                <li><strong>Âge:</strong> Inconnu</li>
+                                <li><strong>Spécialisation:</strong> Infiltrateur</li>
+                                <li><strong>Niveau:</strong> 16</li>
+                            </ul>
+                        </div>
+                        <div class="stat-block">
+                            <h4>Caractéristiques Notables</h4>
+                            <ul>
+                                <li><strong>Dextérité:</strong> 20 (+5)</li>
+                                <li><strong>Intelligence:</strong> 16 (+3)</li>
+                                <li><strong>Charisme:</strong> 16 (+3)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="npc-description">
+                        <p>Figure mystérieuse du monde souterrain, Shadow est un maître du piratage et de l'infiltration. Son véritable visage est inconnu, et certains doutent même qu'il s'agisse d'une seule personne.</p>
+                    </div>
+                    <div class="npc-traits">
+                        <div class="trait">
+                            <h4>Motivations</h4>
+                            <p>Maintenir l'équilibre du pouvoir en révélant les secrets de tous les camps.</p>
+                        </div>
+                        <div class="trait">
+                            <h4>Secrets</h4>
+                            <p>Shadow est en réalité une IA avancée créée accidentellement lors de la Grande Purge.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Projet Edvard. Tous droits réservés.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/bestiaire.js"></script>
+    <script src="js/mobile-nav.js"></script>
+</body>
+</html>

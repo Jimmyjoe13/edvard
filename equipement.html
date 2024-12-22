@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Équipement - Projet Edvard</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="images/logo-edvard.jpg" alt="Logo Projet Edvard">
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="univers-lore.html">Univers & Lore</a></li>
+                <li><a href="regles.html">Règles</a></li>
+                <li><a href="creation-personnage.html">Création de Personnage</a></li>
+                <li><a href="bestiaire.html">Bestiaire</a></li>
+                <li><a href="equipement.html" class="active">Équipement</a></li>
+                <li><a href="scenarios.html">Scénarios</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="equipment">
+        <section class="equipment-intro">
+            <h1>Équipement</h1>
+            <p class="intro-text">Découvrez l'arsenal complet d'équipements, d'armes et de protections disponibles dans l'univers d'Edvard.</p>
+        </section>
+
+        <section class="equipment-categories">
+            <div class="category-tabs">
+                <button class="tab-btn active" data-category="armes">Armes</button>
+                <button class="tab-btn" data-category="armures">Armures</button>
+                <button class="tab-btn" data-category="boucliers">Boucliers</button>
+                <button class="tab-btn" data-category="equipement">Équipement Divers</button>
+            </div>
+
+            <!-- Section Armes -->
+            <div class="category-content active" id="armes">
+                <h2>Armes</h2>
+                <div class="equipment-grid">
+                    <!-- Armes de Corps à Corps -->
+                    <div class="equipment-group">
+                        <h3>Armes de Corps à Corps</h3>
+                        <div class="equipment-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Dégâts</th>
+                                        <th>Type</th>
+                                        <th>Propriétés</th>
+                                        <th>Encombrement</th>
+                                        <th>Prix (Crédits)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Lame énergétique</td>
+                                        <td>1d8+2</td>
+                                        <td>Tranchant/Énergie</td>
+                                        <td>Légère, Finesse</td>
+                                        <td>1</td>
+                                        <td>800</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Masse à impulsion</td>
+                                        <td>2d6</td>
+                                        <td>Contondant</td>
+                                        <td>Lourde</td>
+                                        <td>3</td>
+                                        <td>600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Vibro-lame</td>
+                                        <td>1d10</td>
+                                        <td>Perforant</td>
+                                        <td>Polyvalente (1d12)</td>
+                                        <td>2</td>
+                                        <td>750</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lame monofilament</td>
+                                        <td>2d6</td>
+                                        <td>Tranchant</td>
+                                        <td>Finesse, Légère, Saignement</td>
+                                        <td>1</td>
+                                        <td>900</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gantelet énergétique</td>
+                                        <td>1d8+1</td>
+                                        <td>Contondant/Énergie</td>
+                                        <td>Légère, Parade (+1)</td>
+                                        <td>2</td>
+                                        <td>650</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Hache à plasma</td>
+                                        <td>2d8</td>
+                                        <td>Tranchant/Énergie</td>
+                                        <td>Lourde, Destructrice</td>
+                                        <td>4</td>
+                                        <td>1100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fouet neural</td>
+                                        <td>1d6</td>
+                                        <td>Électrique</td>
+                                        <td>Portée (3m), Paralysant</td>
+                                        <td>1</td>
+                                        <td>850</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Armes à Distance -->
+                    <div class="equipment-group">
+                        <h3>Armes à Distance</h3>
+                        <div class="equipment-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Dégâts</th>
+                                        <th>Type</th>
+                                        <th>Portée</th>
+                                        <th>Propriétés</th>
+                                        <th>Encombrement</th>
+                                        <th>Prix (Crédits)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Fusil à plasma</td>
+                                        <td>2d8</td>
+                                        <td>Énergie</td>
+                                        <td>30/90</td>
+                                        <td>Munitions, Rechargement</td>
+                                        <td>4</td>
+                                        <td>1200</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pistolet laser</td>
+                                        <td>1d6</td>
+                                        <td>Énergie</td>
+                                        <td>20/60</td>
+                                        <td>Légère, Munitions</td>
+                                        <td>1</td>
+                                        <td>500</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Canon à railgun</td>
+                                        <td>2d12</td>
+                                        <td>Perforant</td>
+                                        <td>50/150</td>
+                                        <td>Lourde, Rechargement</td>
+                                        <td>6</td>
+                                        <td>2000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fusil de précision quantique</td>
+                                        <td>2d10</td>
+                                        <td>Perforant/Énergie</td>
+                                        <td>80/240</td>
+                                        <td>Lourde, Lunette, Traversante</td>
+                                        <td>5</td>
+                                        <td>2500</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pistolet à nanites</td>
+                                        <td>1d8</td>
+                                        <td>Nécrotique</td>
+                                        <td>15/45</td>
+                                        <td>Légère, Contamination</td>
+                                        <td>2</td>
+                                        <td>1500</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lance-grenades intelligent</td>
+                                        <td>3d6</td>
+                                        <td>Explosif</td>
+                                        <td>25/75</td>
+                                        <td>Lourde, Zone (3m)</td>
+                                        <td>5</td>
+                                        <td>1800</td>
+                                    </tr>
+                                    <tr>
+                                        <td>SMG sonique</td>
+                                        <td>2d4</td>
+                                        <td>Sonique</td>
+                                        <td>20/60</td>
+                                        <td>Légère, Rafale (3)</td>
+                                        <td>3</td>
+                                        <td>1300</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Armures -->
+            <div class="category-content" id="armures">
+                <h2>Armures</h2>
+                <div class="equipment-grid">
+                    <div class="equipment-group">
+                        <h3>Armures Légères</h3>
+                        <div class="equipment-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Classe d'Armure</th>
+                                        <th>Bonus Max Dex</th>
+                                        <th>Force Requise</th>
+                                        <th>Furtivité</th>
+                                        <th>Encombrement</th>
+                                        <th>Prix (Crédits)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Combinaison tactique</td>
+                                        <td>12 + Mod Dex</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>2</td>
+                                        <td>400</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Armure en nano-fibres</td>
+                                        <td>13 + Mod Dex</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>Avantage</td>
+                                        <td>3</td>
+                                        <td>800</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Armure symbiote</td>
+                                        <td>14 + Mod Dex</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>Auto-réparation</td>
+                                        <td>3</td>
+                                        <td>2000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Armure caméléon</td>
+                                        <td>13 + Mod Dex</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>Camouflage actif</td>
+                                        <td>2</td>
+                                        <td>1500</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="equipment-group">
+                        <h3>Armures Moyennes</h3>
+                        <div class="equipment-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Classe d'Armure</th>
+                                        <th>Bonus Max Dex</th>
+                                        <th>Force Requise</th>
+                                        <th>Furtivité</th>
+                                        <th>Encombrement</th>
+                                        <th>Prix (Crédits)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Armure de combat</td>
+                                        <td>14 + Mod Dex (max 2)</td>
+                                        <td>+2</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>4</td>
+                                        <td>1200</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Exo-armure</td>
+                                        <td>15 + Mod Dex (max 2)</td>
+                                        <td>+2</td>
+                                        <td>13</td>
+                                        <td>Désavantage</td>
+                                        <td>5</td>
+                                        <td>1500</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Armure réactive</td>
+                                        <td>15 + Mod Dex (max 2)</td>
+                                        <td>+2</td>
+                                        <td>12</td>
+                                        <td>Contre-attaque</td>
+                                        <td>5</td>
+                                        <td>1800</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Armure gravitationnelle</td>
+                                        <td>16 + Mod Dex (max 2)</td>
+                                        <td>+2</td>
+                                        <td>14</td>
+                                        <td>Anti-gravité</td>
+                                        <td>6</td>
+                                        <td>2200</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="equipment-group">
+                        <h3>Armures Lourdes</h3>
+                        <div class="equipment-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Classe d'Armure</th>
+                                        <th>Bonus Max Dex</th>
+                                        <th>Force Requise</th>
+                                        <th>Furtivité</th>
+                                        <th>Encombrement</th>
+                                        <th>Prix (Crédits)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Armure énergétique</td>
+                                        <td>16</td>
+                                        <td>-</td>
+                                        <td>15</td>
+                                        <td>Désavantage</td>
+                                        <td>7</td>
+                                        <td>2000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Armure de guerre</td>
+                                        <td>18</td>
+                                        <td>-</td>
+                                        <td>17</td>
+                                        <td>Désavantage</td>
+                                        <td>8</td>
+                                        <td>3000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Armure Titan</td>
+                                        <td>19</td>
+                                        <td>-</td>
+                                        <td>18</td>
+                                        <td>Résistance aux dégâts</td>
+                                        <td>9</td>
+                                        <td>4000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Armure Phase</td>
+                                        <td>17</td>
+                                        <td>-</td>
+                                        <td>16</td>
+                                        <td>Dématérialisation</td>
+                                        <td>7</td>
+                                        <td>3500</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Boucliers -->
+            <div class="category-content" id="boucliers">
+                <h2>Boucliers</h2>
+                <div class="equipment-grid">
+                    <div class="equipment-group">
+                        <div class="equipment-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Bonus CA</th>
+                                        <th>Propriétés Spéciales</th>
+                                        <th>Force Requise</th>
+                                        <th>Encombrement</th>
+                                        <th>Prix (Crédits)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Bouclier énergétique</td>
+                                        <td>+2</td>
+                                        <td>Résistance aux dégâts d'énergie</td>
+                                        <td>-</td>
+                                        <td>3</td>
+                                        <td>800</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bouclier tactique</td>
+                                        <td>+1</td>
+                                        <td>Action bonus pour couvrir un allié</td>
+                                        <td>13</td>
+                                        <td>2</td>
+                                        <td>500</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bouclier anti-émeute</td>
+                                        <td>+3</td>
+                                        <td>Couverture totale contre projectiles</td>
+                                        <td>15</td>
+                                        <td>4</td>
+                                        <td>1200</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bouclier holographique</td>
+                                        <td>+2</td>
+                                        <td>Projette des leurres</td>
+                                        <td>-</td>
+                                        <td>2</td>
+                                        <td>1000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bouclier magnétique</td>
+                                        <td>+3</td>
+                                        <td>Repousse les projectiles métalliques</td>
+                                        <td>14</td>
+                                        <td>4</td>
+                                        <td>1500</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bouclier à phase</td>
+                                        <td>+2</td>
+                                        <td>Traverse la matière solide</td>
+                                        <td>12</td>
+                                        <td>3</td>
+                                        <td>2000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Équipement Divers -->
+            <div class="category-content" id="equipement">
+                <h2>Équipement Divers</h2>
+                <div class="equipment-grid">
+                    <div class="equipment-group">
+                        <div class="equipment-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Description</th>
+                                        <th>Utilisation</th>
+                                        <th>Encombrement</th>
+                                        <th>Prix (Crédits)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Kit de premiers soins</td>
+                                        <td>Matériel médical de base</td>
+                                        <td>Soigne 1d6+2 PV</td>
+                                        <td>1</td>
+                                        <td>50</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Scanner portable</td>
+                                        <td>Analyse l'environnement</td>
+                                        <td>Détecte dangers/ressources</td>
+                                        <td>1</td>
+                                        <td>300</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Générateur de champ</td>
+                                        <td>Crée une barrière d'énergie</td>
+                                        <td>Protection temporaire</td>
+                                        <td>2</td>
+                                        <td>400</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Drone de reconnaissance</td>
+                                        <td>Exploration à distance</td>
+                                        <td>Vision à distance</td>
+                                        <td>1</td>
+                                        <td>600</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Implant de piratage</td>
+                                        <td>Interface neurale pour le hacking</td>
+                                        <td>+2 aux jets de piratage</td>
+                                        <td>1</td>
+                                        <td>1200</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Amplificateur synaptique</td>
+                                        <td>Améliore les réflexes</td>
+                                        <td>+1 Initiative</td>
+                                        <td>1</td>
+                                        <td>1500</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nano-médikit</td>
+                                        <td>Soins avancés par nanites</td>
+                                        <td>Soigne 2d8+4 PV</td>
+                                        <td>2</td>
+                                        <td>800</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Module de camouflage</td>
+                                        <td>Système de dissimulation</td>
+                                        <td>Avantage en Discrétion</td>
+                                        <td>2</td>
+                                        <td>1000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Analyseur quantique</td>
+                                        <td>Scan avancé de l'environnement</td>
+                                        <td>Détection améliorée</td>
+                                        <td>1</td>
+                                        <td>900</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Projet Edvard. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        // Navigation mobile
+        const burger = document.querySelector('.burger');
+        const nav = document.querySelector('.nav-links');
+        
+        burger.addEventListener('click', () => {
+            nav.classList.toggle('nav-active');
+            burger.classList.toggle('toggle');
+        });
+
+        // Gestion des onglets d'équipement
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const categoryContents = document.querySelectorAll('.category-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Retirer la classe active de tous les boutons
+                tabBtns.forEach(b => b.classList.remove('active'));
+                // Ajouter la classe active au bouton cliqué
+                btn.classList.add('active');
+
+                // Masquer tous les contenus
+                categoryContents.forEach(content => content.classList.remove('active'));
+                // Afficher le contenu correspondant
+                const targetCategory = document.getElementById(btn.dataset.category);
+                targetCategory.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
