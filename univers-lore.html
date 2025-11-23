@@ -341,6 +341,93 @@
             </div>
         </section>
 
+        <section class="lore-section" id="timeline">
+            <h2>Chronologie</h2>
+            <div class="timeline-container">
+                <ul class="timeline">
+                    <li class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>2150 - La Grande Exode</h3>
+                            <p>L'humanité quitte la Terre mourante à bord des Arches Stellaires.</p>
+                        </div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>2300 - Découverte des Flux</h3>
+                            <p>Les premiers colons découvrent les Flux Primordiaux, vestiges des Architectes.</p>
+                        </div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>2450 - L'Éveil Technomantique</h3>
+                            <p>Première manipulation réussie de la magie par la technologie. Naissance des Technomanciens.</p>
+                        </div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>2600 - La Guerre des Forges</h3>
+                            <p>Conflit majeur entre les Néo-Forgés et les Corporations pour l'indépendance des synthétiques.</p>
+                        </div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>2850 - L'Ère Actuelle</h3>
+                            <p>Un équilibre fragile règne. L'aventure commence pour vous.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <style>
+                .timeline-container {
+                    position: relative;
+                    max-width: 800px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }
+                .timeline {
+                    list-style: none;
+                    padding: 0;
+                    position: relative;
+                }
+                .timeline::before {
+                    content: '';
+                    position: absolute;
+                    left: 20px;
+                    top: 0;
+                    height: 100%;
+                    width: 2px;
+                    background: var(--accent-color);
+                }
+                .timeline-item {
+                    margin-bottom: 30px;
+                    padding-left: 50px;
+                    position: relative;
+                }
+                .timeline-item::before {
+                    content: '';
+                    position: absolute;
+                    left: 11px;
+                    top: 5px;
+                    width: 20px;
+                    height: 20px;
+                    background: var(--bg-color);
+                    border: 2px solid var(--accent-color);
+                    border-radius: 50%;
+                    z-index: 1;
+                }
+                .timeline-content {
+                    background: rgba(0, 0, 0, 0.4);
+                    padding: 15px;
+                    border-radius: 8px;
+                    border: 1px solid rgba(0, 255, 136, 0.2);
+                }
+                .timeline-content h3 {
+                    color: var(--accent-color);
+                    margin-top: 0;
+                }
+            </style>
+        </section>
+
         <section class="lore-section" id="races">
             <h2>Les Races Jouables</h2>
             <div class="races-container">
@@ -411,6 +498,26 @@
                                 <li>Corps cristallin régénératif</li>
                                 <li>Absorption d'énergie cosmique</li>
                                 <li>Force physique exceptionnelle</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="race-card">
+                    <div class="race-image">
+                         <div style="width:100%; height:250px; background: linear-gradient(45deg, #bc13fe, #00d2ff); display:flex; align-items:center; justify-content:center; color:white;">
+                            <i class="fas fa-bolt fa-4x"></i>
+                        </div>
+                    </div>
+                    <div class="race-content">
+                        <h3>Les Éthérés</h3>
+                        <div class="race-description">
+                            <p>Nés des Flux Primordiaux, les Éthérés sont des entités d'énergie pure contenues dans des armures de confinement complexes.</p>
+                            <h4>Caractéristiques</h4>
+                            <ul>
+                                <li>Intelligence supérieure</li>
+                                <li>Charisme mystique</li>
+                                <li>Fragilité physique</li>
                             </ul>
                         </div>
                     </div>

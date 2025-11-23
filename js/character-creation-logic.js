@@ -1,154 +1,253 @@
+// Logique principale de la création de personnage
+// Dépend de utils.js et character-manager.js
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Gestion des caractéristiques
-    const characteristicCards = document.querySelectorAll('.characteristic-card');
-    const availablePointsSpan = document.getElementById('available-points');
-    let totalPoints = 27;
+    // Initialisation du Manager
+    const charManager = new window.CharacterManager();
 
-    // Table des coûts
-    const costTable = {
-        8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5,
-        14: 7, 15: 9, 16: 11, 17: 13, 18: 15
+    // --- Gestion de l'UI ---
+
+    const uiElements = {
+        pointsDisplay: document.getElementById('available-points'),
+        statCards: document.querySelectorAll('.characteristic-card'),
+        raceCards: document.querySelectorAll('.race-card'),
+        specCards: document.querySelectorAll('.spec-card'),
+        inputs: {
+            name: document.getElementById('charName'),
+            age: document.getElementById('charAge'),
+            origin: document.getElementById('origin'),
+            background: document.getElementById('background'),
+            appearance: document.getElementById('charAppearance')
+        }
     };
 
-    // Table des modificateurs
-    const modifierTable = {
-        8: -1, 9: -1, 10: 0, 11: 0, 12: 1, 13: 1,
-        14: 2, 15: 2, 16: 3, 17: 3, 18: 4
-    };
+    /**
+     * Met à jour l'affichage des caractéristiques et des points.
+     */
+    function updateStatsUI() {
+        const state = charManager.getState();
+        const effectiveStats = state.effectiveStats; // Stats avec bonus raciaux
 
-    function updateModifier(card, value) {
-        const modSpan = card.querySelector('.mod-value');
-        const modifier = modifierTable[value];
-        modSpan.textContent = modifier >= 0 ? `+${modifier}` : modifier;
-    }
+        // Mise à jour des points disponibles
+        if(uiElements.pointsDisplay) {
+            uiElements.pointsDisplay.textContent = state.availablePoints;
+        }
 
-    function updatePointsDisplay() {
-        availablePointsSpan.textContent = totalPoints;
-    }
+        // Mise à jour de chaque carte de stat
+        uiElements.statCards.forEach(card => {
+            const statName = card.dataset.stat;
+            const baseVal = state.stats[statName];
+            const effectiveVal = effectiveStats[statName];
+            const bonus = effectiveVal - baseVal;
 
-    function canIncrease(currentValue) {
-        if (currentValue >= 18) return false;
-        const nextCost = costTable[currentValue + 1] - costTable[currentValue];
-        return totalPoints >= nextCost;
-    }
+            // Valeur affichée (Finale)
+            const valSpan = card.querySelector('.char-value');
+            if(valSpan) {
+                valSpan.textContent = effectiveVal;
+                // Highlight si bonus
+                if(bonus > 0) {
+                    valSpan.style.color = 'var(--primary-color)';
+                    valSpan.title = `Base: ${baseVal}, Bonus Racial: +${bonus}`;
+                } else if(bonus < 0) {
+                    valSpan.style.color = 'var(--accent-color)'; // Orange/Red usually
+                    valSpan.title = `Base: ${baseVal}, Malus Racial: ${bonus}`;
+                } else {
+                    valSpan.style.color = '';
+                    valSpan.title = '';
+                }
+            }
 
-    function updateAllButtons() {
-        characteristicCards.forEach(card => {
-            const valueSpan = card.querySelector('.char-value');
-            const increaseBtn = card.querySelector('.increase-stat');
-            const decreaseBtn = card.querySelector('.decrease-stat');
-            const currentValue = parseInt(valueSpan.textContent);
+            // Modificateur (basé sur la valeur effective)
+            const modSpan = card.querySelector('.mod-value');
+            if(modSpan) {
+                const mod = window.EdvardUtils.calculateModifier(effectiveVal);
+                modSpan.textContent = window.EdvardUtils.formatModifier(mod);
+            }
 
-            increaseBtn.disabled = !canIncrease(currentValue);
-            decreaseBtn.disabled = currentValue <= 8;
-        });
-    }
+            // Gestion des boutons (basés sur le coût de la valeur de base)
+            const btnPlus = card.querySelector('.increase-stat');
+            const btnMinus = card.querySelector('.decrease-stat');
 
-    characteristicCards.forEach(card => {
-        const decreaseBtn = card.querySelector('.decrease-stat');
-        const increaseBtn = card.querySelector('.increase-stat');
-        const valueSpan = card.querySelector('.char-value');
+            if(btnPlus) {
+                const nextCostDiff = window.EdvardUtils.costTable[baseVal + 1] - window.EdvardUtils.costTable[baseVal];
+                const isMax = baseVal >= 15; // Point Buy Max Limit logic (15 usually)
+                btnPlus.disabled = isMax || state.availablePoints < nextCostDiff;
+            }
 
-        decreaseBtn.addEventListener('click', () => {
-            const currentValue = parseInt(valueSpan.textContent);
-            if (currentValue > 8) {
-                const newValue = currentValue - 1;
-
-                // Refund points
-                const currentCost = costTable[currentValue];
-                const newCost = costTable[newValue];
-                const pointsToRefund = currentCost - newCost;
-
-                totalPoints += pointsToRefund;
-
-                valueSpan.textContent = newValue;
-                updateModifier(card, newValue);
-                updatePointsDisplay();
-                updateAllButtons();
+            if(btnMinus) {
+                btnMinus.disabled = baseVal <= 8;
             }
         });
+    }
 
-        increaseBtn.addEventListener('click', () => {
-            const currentValue = parseInt(valueSpan.textContent);
-            if (canIncrease(currentValue)) {
-                const newValue = currentValue + 1;
+    // --- Event Listeners ---
 
-                // Spend points
-                const currentCost = costTable[currentValue];
-                const nextCost = costTable[newValue];
-                const costDifference = nextCost - currentCost;
+    // 1. Caractéristiques
+    uiElements.statCards.forEach(card => {
+        const statName = card.dataset.stat;
 
-                totalPoints -= costDifference;
+        const btnPlus = card.querySelector('.increase-stat');
+        const btnMinus = card.querySelector('.decrease-stat');
 
-                valueSpan.textContent = newValue;
-                updateModifier(card, newValue);
-                updatePointsDisplay();
-                updateAllButtons();
-            }
-        });
+        if (btnPlus) {
+            btnPlus.addEventListener('click', () => {
+                if (charManager.increaseStat(statName)) {
+                    updateStatsUI();
+                }
+            });
+        }
 
-        // Initial state for this card
-        const initialValue = parseInt(valueSpan.textContent);
-        updateModifier(card, initialValue);
+        if (btnMinus) {
+            btnMinus.addEventListener('click', () => {
+                if (charManager.decreaseStat(statName)) {
+                    updateStatsUI();
+                }
+            });
+        }
     });
 
-    // Initial global state update
-    updatePointsDisplay();
-    updateAllButtons();
+    // 2. Race Selection
+    uiElements.raceCards.forEach(card => {
+        card.addEventListener('click', () => {
+            // Visuel selection
+            uiElements.raceCards.forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
 
-    // Calculateur de points de vie
-    const calculateHP = document.getElementById('calculate-hp');
-    const charSpec = document.getElementById('char-spec');
-    const charLevel = document.getElementById('char-level');
-    const totalHP = document.getElementById('total-hp');
+            const race = card.dataset.race;
+            charManager.setRace(race);
 
-    const baseHP = {
-        'techno-guerrier': 10,
-        'bio-ingenieur': 8,
-        'techno-mage': 6,
-        'infiltrateur': 8
-    };
+            // Important: Refresh stats UI because modifiers might change
+            updateStatsUI();
+        });
+    });
 
-    if (calculateHP) {
-        calculateHP.addEventListener('click', () => {
-            const conCard = document.querySelector('.characteristic-card[data-stat="constitution"]');
-            const conModifier = parseInt(conCard.querySelector('.mod-value').textContent);
-            const level = parseInt(charLevel.value);
-            const specBase = baseHP[charSpec.value];
+    // 3. Spécialisation Selection
+    uiElements.specCards.forEach(card => {
+        card.addEventListener('click', () => {
+            uiElements.specCards.forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
 
-            if (level < 1 || level > 20) {
-                alert('Le niveau doit être entre 1 et 20');
-                return;
+            // Mapping simple titre -> key
+            const title = card.querySelector('h3').textContent;
+            const map = {
+                'Techno-Guerrier': 'techno-guerrier',
+                'Bio-Ingénieur': 'bio-ingenieur',
+                'Techno-Mage': 'techno-mage',
+                'Infiltrateur': 'infiltrateur'
+            };
+            const key = map[title] || title.toLowerCase();
+
+            charManager.setSpecialization(key);
+        });
+    });
+
+
+    // 4. Champs textes (Lore)
+    Object.keys(uiElements.inputs).forEach(key => {
+        const input = uiElements.inputs[key];
+        if(input) {
+            input.addEventListener('input', (e) => {
+                charManager.updateLore(key, e.target.value);
+            });
+        }
+    });
+
+    // --- Restauration UI depuis Etat ---
+    function restoreUI() {
+        const state = charManager.getState();
+
+        // Update Stats (will handle effectives)
+        updateStatsUI();
+
+        // Restore Race Selection
+        if(state.race) {
+            const card = document.querySelector(`.race-card[data-race="${state.race}"]`);
+            if(card) {
+                uiElements.raceCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
             }
+        }
 
-            // Niveau 1 : PV maximum
-            let hp = specBase + conModifier;
-
-            // Niveaux suivants : moyenne des dés + modificateur de Constitution
-            if (level > 1) {
-                const averageRoll = Math.ceil((specBase + 1) / 2);
-                hp += (averageRoll + conModifier) * (level - 1);
+        // Restore Spec
+        if(state.specialization) {
+            const mapInv = {
+                'techno-guerrier': 'Techno-Guerrier',
+                'bio-ingenieur': 'Bio-Ingénieur',
+                'techno-mage': 'Techno-Mage',
+                'infiltrateur': 'Infiltrateur'
+            };
+            const title = mapInv[state.specialization];
+            if(title) {
+                uiElements.specCards.forEach(c => {
+                    if(c.querySelector('h3').textContent === title) {
+                        uiElements.specCards.forEach(x => x.classList.remove('selected'));
+                        c.classList.add('selected');
+                    }
+                });
             }
+        }
 
-            // Minimum 1 PV par niveau
-            hp = Math.max(level, hp);
+        // Restore Inputs
+        if(state.lore) {
+            if(uiElements.inputs.name) uiElements.inputs.name.value = state.lore.name || '';
+            if(uiElements.inputs.age) uiElements.inputs.age.value = state.lore.age || '';
+            if(uiElements.inputs.origin) uiElements.inputs.origin.value = state.lore.origin || '';
+            if(uiElements.inputs.background) uiElements.inputs.background.value = state.lore.background || '';
+            if(uiElements.inputs.appearance) uiElements.inputs.appearance.value = state.lore.appearance || '';
+        }
+    }
 
-            // Afficher le résultat avec animation
-            totalHP.textContent = hp;
-            totalHP.style.animation = 'none';
-            totalHP.offsetHeight; // Forcer le reflow
-            totalHP.style.animation = 'pulse 0.5s';
+    // --- Boutons Sauvegarde / Chargement / PDF ---
+
+    const btnSaveJson = document.getElementById('btn-save-json');
+    if(btnSaveJson) {
+        btnSaveJson.addEventListener('click', () => {
+            charManager.exportJSON();
         });
     }
 
-    // Animation pour le résultat
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-    `;
-    document.head.appendChild(style);
+    const fileInput = document.getElementById('file-upload');
+    if(fileInput) {
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            charManager.importJSON(file, (success) => {
+                if(success) {
+                    restoreUI();
+                    alert('Personnage chargé avec succès !');
+                } else {
+                    alert('Erreur lors de la lecture du fichier.');
+                }
+            });
+        });
+    }
+
+    const btnPdf = document.getElementById('btn-generate-pdf');
+    if(btnPdf) {
+        btnPdf.addEventListener('click', () => {
+            if(window.EdvardPDF) {
+                window.EdvardPDF.generate(charManager.getState());
+            } else {
+                alert("Le module PDF n'est pas chargé.");
+            }
+        });
+    }
+
+    // Générateur de Nom
+    const btnRandomName = document.getElementById('btn-random-name');
+    if(btnRandomName) {
+        btnRandomName.addEventListener('click', () => {
+            const names = ["Kael", "Lyra", "Zane", "Orion", "Vesper", "Cyrus", "Nova", "Aurelius", "Thorne", "Elara"];
+            const random = names[Math.floor(Math.random() * names.length)];
+            const nameInput = document.getElementById('charName');
+            if(nameInput) {
+                nameInput.value = random;
+                charManager.updateLore('name', random);
+            }
+        });
+    }
+
+    // Init
+    restoreUI();
+
 });

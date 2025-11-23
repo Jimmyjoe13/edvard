@@ -1,0 +1,222 @@
+
+/* --- UI Enhancements : Theme Toggle --- */
+.theme-toggle-btn {
+    background: none;
+    border: 1px solid var(--accent-color);
+    color: var(--text-color);
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin-left: 1rem;
+}
+
+.theme-toggle-btn:hover {
+    background: var(--accent-color);
+    color: var(--bg-color);
+    transform: rotate(30deg);
+}
+
+/* Light Theme Variables */
+:root[data-theme="light"] {
+    --bg-color: #f0f0f5;
+    --text-color: #1a1a2e;
+    --card-bg: #ffffff;
+    --border-color: #ccc;
+    --dark-bg: #e0e0e0;
+    --background-dark: #f0f0f5;
+    --text-light: #333;
+}
+
+/* Fix for background image in light mode if needed, or overlay opacity */
+:root[data-theme="light"] body::before {
+    background: rgba(240, 240, 245, 0.95);
+}
+
+
+/* --- UI Enhancements : Dice Roller Widget --- */
+#dice-widget {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 2000;
+}
+
+.dice-float-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    color: var(--bg-color);
+    border: none;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dice-float-btn:hover {
+    transform: scale(1.1) rotate(180deg);
+}
+
+.dice-modal {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    width: 300px;
+    background: var(--card-bg); /* Use card-bg which adapts */
+    background-color: #1a1a2e; /* Fallback for contrast */
+    border: 2px solid var(--accent-color);
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    transform-origin: bottom left;
+    transition: all 0.3s ease;
+}
+
+:root[data-theme="light"] .dice-modal {
+    background-color: #fff;
+    color: #333;
+}
+
+.dice-modal.hidden {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+    pointer-events: none;
+}
+
+.dice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--accent-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.dice-header h3 {
+    margin: 0;
+    color: var(--accent-color);
+    font-size: 1.1rem;
+}
+
+.dice-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+
+.dice-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    padding: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dice-btn:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+.dice-result {
+    text-align: center;
+    margin: 1rem 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+    min-height: 2rem;
+}
+
+.dice-history {
+    max-height: 100px;
+    overflow-y: auto;
+    font-size: 0.8rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 0.5rem;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+/* --- UI Enhancements : Sticky Sidebar --- */
+.preview-sidebar {
+    position: fixed;
+    right: 20px;
+    top: 100px;
+    width: 250px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
+    padding: 1rem;
+    z-index: 900;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+:root[data-theme="light"] .preview-sidebar {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+}
+
+.preview-sidebar h3 {
+    color: var(--accent-color);
+    text-align: center;
+    margin-top: 0;
+    font-size: 1.1rem;
+    border-bottom: 1px solid var(--accent-color);
+    padding-bottom: 0.5rem;
+}
+
+.preview-row {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.preview-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    margin: 0.5rem 0;
+}
+
+.preview-stats div {
+    background: rgba(255,255,255,0.05);
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+:root[data-theme="light"] .preview-stats div {
+    background: rgba(0,0,0,0.05);
+}
+
+.preview-hp {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #ff4757;
+    margin-top: 0.5rem;
+    font-weight: bold;
+}
+
+@media (max-width: 1200px) {
+    .preview-sidebar {
+        display: none; /* Hide on smaller screens or make it a bottom sheet? for now hide */
+    }
+}
+.hidden-mobile {
+    display: none;
+}
+@media (min-width: 1200px) {
+    .hidden-mobile {
+        display: block;
+    }
+}

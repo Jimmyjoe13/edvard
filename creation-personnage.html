@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="css/character-creation.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Scripts Logique (Ordre Important) -->
+    <script src="js/utils.js"></script>
+    <script src="js/character-manager.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/pdf-generator.js"></script>
+    <script src="js/ui-enhancements.js"></script>
 </head>
 <body>
     <header>
@@ -48,14 +55,16 @@
                     <span class="step" data-step="7">Finalisation</span>
                 </div>
             </div>
+
+            <!-- Zone de Contrôle Avancée -->
+            <div class="advanced-controls" style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+                <button id="btn-save-json" class="control-btn"><i class="fas fa-save"></i> Sauvegarder (Fichier)</button>
+                <label for="file-upload" class="control-btn"><i class="fas fa-upload"></i> Charger (Fichier)</label>
+                <input id="file-upload" type="file" accept=".json" style="display: none;">
+            </div>
+
             <div class="download-section">
-                <h3>Téléchargements</h3>
-                <div class="download-buttons">
-                    <a href="resources/fiches/fiche-personnage.pdf" class="download-btn" download>
-                        <i class="fas fa-file-pdf"></i>
-                        Fiche de Personnage (PDF)
-                    </a>
-                </div>
+                <!-- Les boutons de téléchargement sont gérés dans l'étape finale maintenant, mais on peut garder un raccourci ici si voulu -->
             </div>
         </section>
 
@@ -78,15 +87,9 @@
                                 <ul>
                                     <li>+1 à deux caractéristiques au choix</li>
                                     <li>Une compétence supplémentaire au choix</li>
-                                    <li>Un talent supplémentaire au choix</li>
-                                </ul>
-                                <h4>Capacités Spéciales</h4>
-                                <ul>
-                                    <li><strong>Innovation Technologique :</strong> Peut utiliser n'importe quel équipement technologique sans pénalité</li>
-                                    <li><strong>Adaptabilité :</strong> Avantage aux jets de sauvegarde contre les effets environnementaux</li>
                                 </ul>
                                 <h4>Description</h4>
-                                <p>Les humains sont connus pour leur adaptabilité et leur innovation. Ils excellent dans tous les domaines grâce à leur polyvalence naturelle.</p>
+                                <p>Les humains sont connus pour leur adaptabilité et leur innovation.</p>
                             </div>
                         </div>
 
@@ -103,15 +106,9 @@
                                 <ul>
                                     <li>+2 Sagesse</li>
                                     <li>+1 Constitution</li>
-                                    <li>Affinité Biotechnologique innée</li>
-                                </ul>
-                                <h4>Capacités Spéciales</h4>
-                                <ul>
-                                    <li><strong>Symbiose Naturelle :</strong> Peut communiquer avec les systèmes biotechnologiques</li>
-                                    <li><strong>Régénération Améliorée :</strong> Récupère 1 PV supplémentaire par niveau lors des soins</li>
                                 </ul>
                                 <h4>Description</h4>
-                                <p>Les Sylvaïns sont le fruit d'expériences de fusion entre ADN humain et biotechnologie végétale. Ils excellent dans la manipulation des systèmes vivants.</p>
+                                <p>Les Sylvaïns sont le fruit d'expériences de fusion entre ADN humain et biotechnologie végétale.</p>
                             </div>
                         </div>
 
@@ -128,15 +125,9 @@
                                 <ul>
                                     <li>+2 Intelligence</li>
                                     <li>+1 Force</li>
-                                    <li>Résistance aux dégâts physiques</li>
-                                </ul>
-                                <h4>Capacités Spéciales</h4>
-                                <ul>
-                                    <li><strong>Interface Neurale :</strong> Connexion directe avec les systèmes informatiques</li>
-                                    <li><strong>Reconfiguration :</strong> Peut modifier sa structure une fois par repos long</li>
                                 </ul>
                                 <h4>Description</h4>
-                                <p>Les Néo-Forgés sont des êtres cybernétiques avancés, capables de modifier leur structure pour s'adapter à différentes situations.</p>
+                                <p>Les Néo-Forgés sont des êtres cybernétiques avancés.</p>
                             </div>
                         </div>
 
@@ -153,17 +144,36 @@
                                 <ul>
                                     <li>+2 Force</li>
                                     <li>+1 Constitution</li>
-                                    <li>Résistance aux dégâts énergétiques</li>
-                                </ul>
-                                <h4>Capacités Spéciales</h4>
-                                <ul>
-                                    <li><strong>Cristallisation :</strong> Peut créer une armure cristalline temporaire</li>
-                                    <li><strong>Absorption d'Énergie :</strong> Convertit les dégâts énergétiques en points de vie</li>
                                 </ul>
                                 <h4>Description</h4>
-                                <p>Les Skarns sont des êtres cristallins dotés d'une force physique impressionnante et capables d'absorber l'énergie pour se renforcer.</p>
+                                <p>Les Skarns sont des êtres cristallins dotés d'une force physique impressionnante.</p>
                             </div>
                         </div>
+
+                        <!-- Nouvelle Race Ajoutée -->
+                        <div class="race-card" data-race="ether-born">
+                            <div class="race-header">
+                                <h3>Éthéré</h3>
+                                <span class="race-type">Énergétique</span>
+                            </div>
+                            <div class="race-image">
+                                <!-- Placeholder image or utilize an existing one creatively, or leave alt text -->
+                                <div style="width:100%; height:150px; background: linear-gradient(45deg, #bc13fe, #00d2ff); display:flex; align-items:center; justify-content:center; color:white;">
+                                    <i class="fas fa-bolt fa-3x"></i>
+                                </div>
+                            </div>
+                            <div class="race-details">
+                                <h4>Bonus Raciaux</h4>
+                                <ul>
+                                    <li>+2 Intelligence</li>
+                                    <li>+1 Charisme</li>
+                                    <li>-1 Constitution</li>
+                                </ul>
+                                <h4>Description</h4>
+                                <p>Nés des Flux Primordiaux, les Éthérés sont des entités d'énergie pure contenues dans des armures de confinement.</p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="step-navigation">
@@ -174,7 +184,7 @@
             <section class="creation-section" id="etape2">
                 <h2><span class="step-number">2</span> Définir vos Caractéristiques</h2>
                 <div class="step-content">
-                    <p>Distribuez vos points entre les caractéristiques principales. Vous disposez de 27 points à répartir.</p>
+                    <p>Distribuez vos points entre les caractéristiques principales. Vous disposez de <span id="available-points">27</span> points.</p>
                     <div class="characteristics-grid">
                         <div class="characteristic-card" data-stat="force">
                             <div class="char-header">
@@ -187,14 +197,6 @@
                             </div>
                             <div class="char-details">
                                 <p>Modificateur: <span class="mod-value">-1</span></p>
-                                <div class="stat-description">
-                                    <p>Puissance physique, capacité à:</p>
-                                    <ul>
-                                        <li>Porter des charges lourdes</li>
-                                        <li>Utiliser des armes de corps à corps</li>
-                                        <li>Briser des objets</li>
-                                    </ul>
-                                </div>
                             </div>
                         </div>
 
@@ -209,14 +211,6 @@
                             </div>
                             <div class="char-details">
                                 <p>Modificateur: <span class="mod-value">-1</span></p>
-                                <div class="stat-description">
-                                    <p>Réflexes et coordination, capacité à:</p>
-                                    <ul>
-                                        <li>Esquiver les attaques</li>
-                                        <li>Se déplacer furtivement</li>
-                                        <li>Utiliser des armes à distance</li>
-                                    </ul>
-                                </div>
                             </div>
                         </div>
 
@@ -231,14 +225,6 @@
                             </div>
                             <div class="char-details">
                                 <p>Modificateur: <span class="mod-value">-1</span></p>
-                                <div class="stat-description">
-                                    <p>Endurance et vitalité, détermine:</p>
-                                    <ul>
-                                        <li>Points de vie</li>
-                                        <li>Résistance aux poisons</li>
-                                        <li>Récupération</li>
-                                    </ul>
-                                </div>
                             </div>
                         </div>
 
@@ -253,14 +239,6 @@
                             </div>
                             <div class="char-details">
                                 <p>Modificateur: <span class="mod-value">-1</span></p>
-                                <div class="stat-description">
-                                    <p>Capacité d'analyse et connaissances:</p>
-                                    <ul>
-                                        <li>Compétences techniques</li>
-                                        <li>Piratage</li>
-                                        <li>Points de compétence bonus</li>
-                                    </ul>
-                                </div>
                             </div>
                         </div>
 
@@ -275,14 +253,6 @@
                             </div>
                             <div class="char-details">
                                 <p>Modificateur: <span class="mod-value">-1</span></p>
-                                <div class="stat-description">
-                                    <p>Perception et intuition:</p>
-                                    <ul>
-                                        <li>Détection des dangers</li>
-                                        <li>Premiers soins</li>
-                                        <li>Survie</li>
-                                    </ul>
-                                </div>
                             </div>
                         </div>
 
@@ -297,332 +267,88 @@
                             </div>
                             <div class="char-details">
                                 <p>Modificateur: <span class="mod-value">-1</span></p>
-                                <div class="stat-description">
-                                    <p>Force de personnalité:</p>
-                                    <ul>
-                                        <li>Négociation</li>
-                                        <li>Intimidation</li>
-                                        <li>Leadership</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="characteristics-info">
-                        <div class="info-box">
-                            <h4>Points de Caractéristiques</h4>
-                            <div class="points-info">
-                                <p>Points disponibles: <span id="available-points">27</span></p>
-                                <table class="cost-table">
-                                    <tr><th>Score</th><th>Coût</th></tr>
-                                    <tr><td>8</td><td>0</td></tr>
-                                    <tr><td>9</td><td>1</td></tr>
-                                    <tr><td>10</td><td>2</td></tr>
-                                    <tr><td>11</td><td>3</td></tr>
-                                    <tr><td>12</td><td>4</td></tr>
-                                    <tr><td>13</td><td>5</td></tr>
-                                    <tr><td>14</td><td>7</td></tr>
-                                    <tr><td>15</td><td>9</td></tr>
-                                    <tr><td>16</td><td>11</td></tr>
-                                    <tr><td>17</td><td>13</td></tr>
-                                    <tr><td>18</td><td>15</td></tr>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="info-box">
-                            <h4>Points de Vie de Base</h4>
-                            <div class="hp-calculator">
-                                <div class="hp-info">
-                                    <p>PV = Base + Mod. Constitution par niveau</p>
-                                    <p>Base par spécialisation:</p>
-                                    <ul>
-                                        <li>Techno-Guerrier: 10</li>
-                                        <li>Bio-Ingénieur: 8</li>
-                                        <li>Techno-Mage: 6</li>
-                                        <li>Infiltrateur: 8</li>
-                                    </ul>
-                                </div>
-                                <div class="hp-calc-form">
-                                    <div class="calc-row">
-                                        <label for="char-spec">Spécialisation:</label>
-                                        <select id="char-spec">
-                                            <option value="techno-guerrier">Techno-Guerrier</option>
-                                            <option value="bio-ingenieur">Bio-Ingénieur</option>
-                                            <option value="techno-mage">Techno-Mage</option>
-                                            <option value="infiltrateur">Infiltrateur</option>
-                                        </select>
-                                    </div>
-                                    <div class="calc-row">
-                                        <label for="char-level">Niveau:</label>
-                                        <input type="number" id="char-level" min="1" max="20" value="1">
-                                    </div>
-                                    <div class="calc-row">
-                                        <button id="calculate-hp" class="calc-btn">Calculer PV</button>
-                                    </div>
-                                    <div class="hp-result">
-                                        <span>Points de Vie Totaux:</span>
-                                        <span id="total-hp">-</span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="step-navigation">
-                    <button class="prev-step">Retour à la Race</button>
-                    <button class="next-step">Continuer vers la Spécialisation</button>
+                    <button class="prev-step">Retour</button>
+                    <button class="next-step">Continuer</button>
                 </div>
             </section>
 
             <section class="creation-section" id="etape3">
                 <h2><span class="step-number">3</span> Choisir votre Spécialisation</h2>
                 <div class="step-content">
-                    <p>Votre spécialisation définit votre rôle principal et vos capacités spéciales.</p>
                     <div class="specialization-grid">
                         <div class="spec-card">
                             <h3>Techno-Guerrier</h3>
                             <p>Expert en combat augmenté par la technologie</p>
-                            <h4>Capacités :</h4>
-                            <ul>
-                                <li>Maîtrise des armes énergétiques</li>
-                                <li>Armure cybernétique avancée</li>
-                                <li>Amélioration des réflexes</li>
-                            </ul>
                         </div>
                         <div class="spec-card">
                             <h3>Bio-Ingénieur</h3>
-                            <p>Spécialiste de la manipulation génétique et biotechnologique</p>
-                            <h4>Capacités :</h4>
-                            <ul>
-                                <li>Création de nano-organismes</li>
-                                <li>Guérison avancée</li>
-                                <li>Symbiose biotechnologique</li>
-                            </ul>
+                            <p>Spécialiste de la manipulation génétique</p>
                         </div>
                         <div class="spec-card">
                             <h3>Techno-Mage</h3>
-                            <p>Maître de la manipulation d'énergie et des flux technologiques</p>
-                            <h4>Capacités :</h4>
-                            <ul>
-                                <li>Contrôle des flux d'énergie</li>
-                                <li>Piratage psychique</li>
-                                <li>Manipulation quantique</li>
-                            </ul>
+                            <p>Maître de la manipulation d'énergie</p>
                         </div>
                         <div class="spec-card">
                             <h3>Infiltrateur</h3>
-                            <p>Expert en furtivité et systèmes de sécurité</p>
-                            <h4>Capacités :</h4>
-                            <ul>
-                                <li>Camouflage actif</li>
-                                <li>Piratage de systèmes</li>
-                                <li>Sabotage silencieux</li>
-                            </ul>
+                            <p>Expert en furtivité et sécurité</p>
                         </div>
                     </div>
                 </div>
+                <div class="step-navigation">
+                    <button class="prev-step">Retour</button>
+                    <button class="next-step">Continuer</button>
+                </div>
             </section>
 
+            <!-- Étape 4 (Compétences) et 6 (Équipement) simplifiées pour la démo, mais on garde la structure -->
             <section class="creation-section" id="etape4">
-                <h2><span class="step-number">4</span> Compétences et Talents</h2>
+                <h2><span class="step-number">4</span> Compétences (À Venir)</h2>
                 <div class="step-content">
-                    <p>Sélectionnez vos compétences principales et talents spéciaux. Vous avez 10 points de compétence à distribuer.</p>
-                    <div class="skills-container">
-                        <div class="skills-column">
-                            <h3>Compétences de Combat</h3>
-                            <div class="skill-item">
-                                <label>Combat Rapproché</label>
-                                <input type="number" min="0" max="3" value="0">
-                            </div>
-                            <div class="skill-item">
-                                <label>Armes à Distance</label>
-                                <input type="number" min="0" max="3" value="0">
-                            </div>
-                            <div class="skill-item">
-                                <label>Tactique</label>
-                                <input type="number" min="0" max="3" value="0">
-                            </div>
-                        </div>
-                        <div class="skills-column">
-                            <h3>Compétences Techniques</h3>
-                            <div class="skill-item">
-                                <label>Technologie</label>
-                                <input type="number" min="0" max="3" value="0">
-                            </div>
-                            <div class="skill-item">
-                                <label>Piratage</label>
-                                <input type="number" min="0" max="3" value="0">
-                            </div>
-                            <div class="skill-item">
-                                <label>Ingénierie</label>
-                                <input type="number" min="0" max="3" value="0">
-                            </div>
-                        </div>
-                        <div class="skills-column">
-                            <h3>Compétences Sociales</h3>
-                            <div class="skill-item">
-                                <label>Persuasion</label>
-                                <input type="number" min="0" max="3" value="0">
-                            </div>
-                            <div class="skill-item">
-                                <label>Intimidation</label>
-                                <input type="number" min="0" max="3" value="0">
-                            </div>
-                            <div class="skill-item">
-                                <label>Négociation</label>
-                                <input type="number" min="0" max="3" value="0">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="talents-section">
-                        <h3>Talents Spéciaux</h3>
-                        <p>Choisissez 2 talents parmi la liste suivante :</p>
-                        <div class="talents-grid">
-                            <div class="talent-option">
-                                <input type="checkbox" id="talent1">
-                                <label for="talent1">Adaptation Rapide</label>
-                                <p>Bonus aux jets lors de situations nouvelles</p>
-                            </div>
-                            <div class="talent-option">
-                                <input type="checkbox" id="talent2">
-                                <label for="talent2">Interface Neurale</label>
-                                <p>Connexion améliorée avec la technologie</p>
-                            </div>
-                            <div class="talent-option">
-                                <input type="checkbox" id="talent3">
-                                <label for="talent3">Régénération Avancée</label>
-                                <p>Guérison plus rapide des blessures</p>
-                            </div>
-                            <div class="talent-option">
-                                <input type="checkbox" id="talent4">
-                                <label for="talent4">Maîtrise Énergétique</label>
-                                <p>Manipulation améliorée des sources d'énergie</p>
-                            </div>
-                        </div>
-                    </div>
+                    <p>Cette section est en cours de refonte pour utiliser le nouveau système dynamique.</p>
+                </div>
+                <div class="step-navigation">
+                    <button class="prev-step">Retour</button>
+                    <button class="next-step">Continuer</button>
                 </div>
             </section>
 
             <section class="creation-section" id="etape5">
-                <h2><span class="step-number">5</span> Histoire et Personnalité</h2>
+                <h2><span class="step-number">5</span> Histoire</h2>
                 <div class="step-content">
-                    <div class="background-section">
-                        <h3>Historique</h3>
-                        <div class="form-group">
-                            <label for="origin">Origine :</label>
-                            <select id="origin">
-                                <option value="">Choisissez votre origine...</option>
-                                <option value="colony">Colon Spatial</option>
-                                <option value="corporate">Corporate</option>
-                                <option value="nomad">Nomade</option>
-                                <option value="outcast">Paria</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="background">Histoire Personnelle :</label>
-                            <textarea id="background" rows="4" placeholder="Décrivez le passé de votre personnage..."></textarea>
-                        </div>
+                    <div class="form-group">
+                        <label for="origin">Origine :</label>
+                        <select id="origin">
+                            <option value="">Choisissez...</option>
+                            <option value="colony">Colon Spatial</option>
+                            <option value="corporate">Corporate</option>
+                            <option value="nomad">Nomade</option>
+                            <option value="outcast">Paria</option>
+                        </select>
                     </div>
-                    <div class="personality-section">
-                        <h3>Traits de Personnalité</h3>
-                        <div class="form-group">
-                            <label for="motivation">Motivation Principale :</label>
-                            <input type="text" id="motivation" placeholder="Qu'est-ce qui motive votre personnage ?">
-                        </div>
-                        <div class="personality-traits">
-                            <div class="trait-group">
-                                <label>Force :</label>
-                                <input type="text" placeholder="Principal trait positif">
-                            </div>
-                            <div class="trait-group">
-                                <label>Faiblesse :</label>
-                                <input type="text" placeholder="Principal défaut">
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="background">Histoire :</label>
+                        <textarea id="background" rows="4"></textarea>
                     </div>
+                </div>
+                <div class="step-navigation">
+                    <button class="prev-step">Retour</button>
+                    <button class="next-step">Continuer</button>
                 </div>
             </section>
 
             <section class="creation-section" id="etape6">
-                <h2><span class="step-number">6</span> Équipement Initial</h2>
+                <h2><span class="step-number">6</span> Équipement</h2>
                 <div class="step-content">
-                    <p>Choisissez votre équipement de départ. Vous disposez de 1000 crédits.</p>
-                    <div class="equipment-selection">
-                        <div class="equipment-category">
-                            <h3>Armes</h3>
-                            <div class="equipment-grid">
-                                <div class="equipment-item">
-                                    <label>
-                                        <input type="checkbox">
-                                        Pistolet Énergétique (300 cr)
-                                    </label>
-                                </div>
-                                <div class="equipment-item">
-                                    <label>
-                                        <input type="checkbox">
-                                        Lame Monofilament (250 cr)
-                                    </label>
-                                </div>
-                                <div class="equipment-item">
-                                    <label>
-                                        <input type="checkbox">
-                                        Fusil à Impulsion (400 cr)
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="equipment-category">
-                            <h3>Protection</h3>
-                            <div class="equipment-grid">
-                                <div class="equipment-item">
-                                    <label>
-                                        <input type="checkbox">
-                                        Armure Légère (200 cr)
-                                    </label>
-                                </div>
-                                <div class="equipment-item">
-                                    <label>
-                                        <input type="checkbox">
-                                        Bouclier Énergétique (350 cr)
-                                    </label>
-                                </div>
-                                <div class="equipment-item">
-                                    <label>
-                                        <input type="checkbox">
-                                        Implant Défensif (300 cr)
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="equipment-category">
-                            <h3>Outils</h3>
-                            <div class="equipment-grid">
-                                <div class="equipment-item">
-                                    <label>
-                                        <input type="checkbox">
-                                        Kit de Piratage (150 cr)
-                                    </label>
-                                </div>
-                                <div class="equipment-item">
-                                    <label>
-                                        <input type="checkbox">
-                                        Médikit Avancé (200 cr)
-                                    </label>
-                                </div>
-                                <div class="equipment-item">
-                                    <label>
-                                        <input type="checkbox">
-                                        Scanner Multi-spectral (250 cr)
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="credits-remaining">
-                        Crédits restants : <span id="remainingCredits">1000</span>
-                    </div>
+                    <p>Sélection simplifiée pour le prototype.</p>
+                </div>
+                <div class="step-navigation">
+                    <button class="prev-step">Retour</button>
+                    <button class="next-step">Continuer</button>
                 </div>
             </section>
 
@@ -630,32 +356,30 @@
                 <h2><span class="step-number">7</span> Finalisation</h2>
                 <div class="step-content">
                     <div class="character-summary">
-                        <h3>Résumé du Personnage</h3>
-                        <div class="summary-grid">
-                            <div class="summary-section">
-                                <h4>Informations de Base</h4>
-                                <div class="form-group">
-                                    <label for="charName">Nom du Personnage :</label>
-                                    <input type="text" id="charName" placeholder="Entrez le nom...">
-                                </div>
-                                <div class="form-group">
-                                    <label for="charAge">Âge :</label>
-                                    <input type="number" id="charAge" min="18" max="200">
-                                </div>
-                            </div>
-                            <div class="summary-section">
-                                <h4>Apparence</h4>
-                                <div class="form-group">
-                                    <label for="charAppearance">Description Physique :</label>
-                                    <textarea id="charAppearance" rows="3" placeholder="Décrivez l'apparence de votre personnage..."></textarea>
-                                </div>
+                        <h3>Résumé</h3>
+                        <div class="form-group">
+                            <label for="charName">Nom du Personnage :</label>
+                            <div style="display: flex; gap: 5px;">
+                                <input type="text" id="charName" placeholder="Entrez le nom...">
+                                <button id="btn-random-name" class="control-btn small"><i class="fas fa-dice"></i></button>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="charAge">Âge :</label>
+                            <input type="number" id="charAge" min="18" max="200">
+                        </div>
+                        <div class="form-group">
+                            <label for="charAppearance">Apparence :</label>
+                            <textarea id="charAppearance" rows="3"></textarea>
+                        </div>
                     </div>
+
                     <div class="action-buttons">
-                        <button class="btn-save">Sauvegarder le Personnage</button>
-                        <button class="btn-print">Imprimer la Fiche</button>
+                        <button id="btn-generate-pdf" class="btn-save download-btn"><i class="fas fa-file-pdf"></i> Télécharger la Fiche PDF</button>
                     </div>
+                </div>
+                <div class="step-navigation">
+                    <button class="prev-step">Retour</button>
                 </div>
             </section>
         </div>
@@ -665,6 +389,51 @@
         <p>&copy; 2024 Projet Edvard. Tous droits réservés.</p>
     </footer>
 
+    <!-- Script principal de logique (qui fait le lien) -->
     <script src="js/character-creation-logic.js"></script>
+
+    <!-- Gestion Navigation Étapes (Script simple inline pour gérer l'affichage des sections) -->
+    <script>
+        const steps = document.querySelectorAll('.creation-section');
+        const dots = document.querySelectorAll('.progress-steps .step');
+        let currentStep = 0;
+
+        function showStep(index) {
+            steps.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+
+            steps[index].classList.add('active');
+            dots[index].classList.add('active');
+
+            // Scroll top
+            window.scrollTo(0, 0);
+        }
+
+        document.querySelectorAll('.next-step').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if(currentStep < steps.length - 1) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            });
+        });
+
+        document.querySelectorAll('.prev-step').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if(currentStep > 0) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
+            });
+        });
+
+        // Clic sur les dots
+        dots.forEach((dot, idx) => {
+            dot.addEventListener('click', () => {
+                currentStep = idx;
+                showStep(currentStep);
+            });
+        });
+    </script>
 </body>
 </html>
