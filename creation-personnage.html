@@ -12,6 +12,7 @@
     <!-- Scripts Logique (Ordre Important) -->
     <script src="js/utils.js"></script>
     <script src="js/skills-data.js"></script>
+    <script src="js/equipment-data.js"></script>
     <script src="js/character-manager.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="js/pdf-generator.js"></script>
@@ -346,7 +347,40 @@
             <section class="creation-section" id="etape6">
                 <h2><span class="step-number">6</span> Équipement</h2>
                 <div class="step-content">
-                    <p>Sélection simplifiée pour le prototype.</p>
+                    <p>Choisissez votre équipement de départ en fonction de votre spécialisation.</p>
+
+                    <div class="equipment-selection">
+                        <div class="equip-group">
+                            <h3>Arme Principale</h3>
+                            <select id="weapon-select" class="equip-select">
+                                <option value="">Choisir une arme...</option>
+                            </select>
+                            <div id="weapon-details" class="item-details hidden">
+                                <h4 class="item-name">Nom</h4>
+                                <p>Type: <span class="item-type"></span></p>
+                                <p>Dégâts: <span class="item-dmg"></span></p>
+                                <p>Propriétés: <span class="item-prop"></span></p>
+                            </div>
+                        </div>
+
+                        <div class="equip-group">
+                            <h3>Armure</h3>
+                            <select id="armor-select" class="equip-select">
+                                <option value="">Choisir une armure...</option>
+                            </select>
+                            <div id="armor-details" class="item-details hidden">
+                                <h4 class="item-name">Nom</h4>
+                                <p>Défense: <span class="item-def"></span></p>
+                                <p>Description: <span class="item-desc"></span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="starting-kit-suggestion">
+                        <button id="btn-apply-kit" class="control-btn small">Appliquer le Kit de Départ</button>
+                        <span id="kit-msg" style="margin-left: 10px; font-size: 0.9em; color: var(--text-light);"></span>
+                    </div>
+
                 </div>
                 <div class="step-navigation">
                     <button class="prev-step">Retour</button>
