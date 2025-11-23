@@ -77,23 +77,21 @@
                 effectiveStats: effectiveStats
             };
         }
+      }
+    }
 
-        /**
-         * Calcule les stats finales (Base + Racial).
-         */
-        getEffectiveStats() {
-            const effective = { ...this.state.stats };
-
-            if (this.state.race && this.racialBonuses[this.state.race]) {
-                const bonuses = this.racialBonuses[this.state.race].stats;
-                for (const [stat, bonus] of Object.entries(bonuses)) {
-                    if (effective[stat] !== undefined) {
-                        effective[stat] += bonus;
-                    }
-                }
-            }
-            return effective;
-        }
+    /**
+     * Retourne l'état complet du personnage avec les stats effectives ajoutées.
+     */
+    getState() {
+      // Calculer les stats effectives à la volée pour l'affichage
+      const effectiveStats = this.getEffectiveStats();
+      // On retourne une copie de l'état enrichie
+      return {
+        ...this.state,
+        effectiveStats: effectiveStats,
+      };
+    }
 
         /**
          * Calcule les stats dérivées (HP, Credits, etc.)
@@ -109,6 +107,9 @@
                 this.state.derived.credits = 100;
             }
         }
+      }
+      return effective;
+    }
 
         loadState(newState) {
             if (!newState) return;
@@ -129,11 +130,13 @@
             const currentVal = this.state.stats[statName];
             if (currentVal >= 15) return false;
 
-            const costTable = window.EdvardUtils ? window.EdvardUtils.costTable : this._getCostTable();
+      const costTable = window.EdvardUtils
+        ? window.EdvardUtils.costTable
+        : this._getCostTable();
 
-            const currentCost = costTable[currentVal] || 0;
-            const nextCost = costTable[currentVal + 1] || 0;
-            const diff = nextCost - currentCost;
+      const currentCost = costTable[currentVal] || 0;
+      const nextCost = costTable[currentVal + 1] || 0;
+      const diff = nextCost - currentCost;
 
             if (this.state.availablePoints >= diff) {
                 this.state.stats[statName]++;
@@ -149,7 +152,9 @@
             const currentVal = this.state.stats[statName];
             if (currentVal <= 8) return false;
 
-            const costTable = window.EdvardUtils ? window.EdvardUtils.costTable : this._getCostTable();
+      const costTable = window.EdvardUtils
+        ? window.EdvardUtils.costTable
+        : this._getCostTable();
 
             const currentCost = costTable[currentVal] || 0;
             const prevCost = costTable[currentVal - 1] || 0;
@@ -232,12 +237,12 @@
             this.saveCharacter();
         }
 
-        updateLore(key, value) {
-            if (this.state.lore.hasOwnProperty(key)) {
-                this.state.lore[key] = value;
-                this.saveCharacter();
-            }
-        }
+    updateLore(key, value) {
+      if (this.state.lore.hasOwnProperty(key)) {
+        this.state.lore[key] = value;
+        this.saveCharacter();
+      }
+    }
 
         saveCharacter() {
             localStorage.setItem(this.storageKey, JSON.stringify(this.state));
@@ -246,32 +251,36 @@
             window.dispatchEvent(event);
         }
 
-        exportJSON() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.state, null, 2));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", (this.state.lore.name || "personnage") + ".json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-        }
-
-        importJSON(file, callback) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                try {
-                    const parsed = JSON.parse(event.target.result);
-                    this.loadState(parsed);
-                    if(callback) callback(true);
-                } catch (e) {
-                    console.error("Erreur parsing JSON", e);
-                    if(callback) callback(false);
-                }
-            };
-            reader.readAsText(file);
-        }
+    exportJSON() {
+      const dataStr =
+        "data:text/json;charset=utf-8," +
+        encodeURIComponent(JSON.stringify(this.state, null, 2));
+      const downloadAnchorNode = document.createElement("a");
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute(
+        "download",
+        (this.state.lore.name || "personnage") + ".json"
+      );
+      document.body.appendChild(downloadAnchorNode);
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
     }
 
-    window.CharacterManager = CharacterManager;
+    importJSON(file, callback) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          this.loadState(parsed);
+          if (callback) callback(true);
+        } catch (e) {
+          console.error("Erreur parsing JSON", e);
+          if (callback) callback(false);
+        }
+      };
+      reader.readAsText(file);
+    }
+  }
 
+  window.CharacterManager = CharacterManager;
 })(window);
