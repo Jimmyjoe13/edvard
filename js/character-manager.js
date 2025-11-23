@@ -12,7 +12,7 @@
 
             // Bonus raciaux définis
             this.racialBonuses = {
-                'humain': { stats: {}, free: 2 }, // Spécial: +1 à deux stats au choix (non implémenté auto ici, laissé à la base)
+                'humain': { stats: {}, free: 2 },
                 'sylvain': { stats: { 'sagesse': 2, 'constitution': 1 } },
                 'neo-forge': { stats: { 'intelligence': 2, 'force': 1 } },
                 'skarn': { stats: { 'force': 2, 'constitution': 1 } },
@@ -43,7 +43,7 @@
                     background: "",
                     appearance: ""
                 },
-                skills: [],
+                skills: [], // Tableau des IDs de compétences choisies
                 equipment: []
             };
 
@@ -71,9 +71,7 @@
          * Retourne l'état complet du personnage avec les stats effectives ajoutées.
          */
         getState() {
-            // Calculer les stats effectives à la volée pour l'affichage
             const effectiveStats = this.getEffectiveStats();
-            // On retourne une copie de l'état enrichie
             return {
                 ...this.state,
                 effectiveStats: effectiveStats
@@ -99,52 +97,37 @@
 
         /**
          * Calcule les stats dérivées (HP, Credits, etc.)
-         * Utilise la Constitution effective (Base + Race).
          */
         calculateDerivedStats() {
-            // Récupérer stats avec bonus
             const stats = this.getEffectiveStats();
-
-            // Calcul HP
             const con = stats.constitution;
             const modCon = window.EdvardUtils ? window.EdvardUtils.calculateModifier(con) : Math.floor((con - 10) / 2);
 
-            // Minimum 1 PV
             this.state.derived.hp = Math.max(1, 10 + modCon);
 
-            // Credits (Placeholder logic)
             if (this.state.derived.credits === 0) {
                 this.state.derived.credits = 100;
             }
         }
 
-        /**
-         * Charge un état donné (fusionne avec l'état actuel).
-         */
         loadState(newState) {
             if (!newState) return;
 
-            // Fusion prudente
             if (newState.availablePoints !== undefined) this.state.availablePoints = newState.availablePoints;
             if (newState.race) this.state.race = newState.race;
             if (newState.specialization) this.state.specialization = newState.specialization;
 
-            if (newState.stats) {
-                this.state.stats = { ...this.state.stats, ...newState.stats };
-            }
-            if (newState.lore) {
-                this.state.lore = { ...this.state.lore, ...newState.lore };
-            }
+            if (newState.stats) this.state.stats = { ...this.state.stats, ...newState.stats };
+            if (newState.lore) this.state.lore = { ...this.state.lore, ...newState.lore };
+            if (newState.skills) this.state.skills = [...newState.skills];
 
-            // Calculer les dérivés après le chargement pour être sûr d'être synchro avec les stats
             this.calculateDerivedStats();
-
-            this.saveCharacter(); // Sauvegarde immédiate
+            this.saveCharacter();
         }
 
         increaseStat(statName) {
             const currentVal = this.state.stats[statName];
-            if (currentVal >= 15) return false; // Max pour Point Buy avant raciaux
+            if (currentVal >= 15) return false;
 
             const costTable = window.EdvardUtils ? window.EdvardUtils.costTable : this._getCostTable();
 
@@ -155,7 +138,6 @@
             if (this.state.availablePoints >= diff) {
                 this.state.stats[statName]++;
                 this.state.availablePoints -= diff;
-
                 this.calculateDerivedStats();
                 this.saveCharacter();
                 return true;
@@ -165,21 +147,69 @@
 
         decreaseStat(statName) {
             const currentVal = this.state.stats[statName];
-            if (currentVal <= 8) return false; // Min pour Point Buy
+            if (currentVal <= 8) return false;
 
             const costTable = window.EdvardUtils ? window.EdvardUtils.costTable : this._getCostTable();
 
             const currentCost = costTable[currentVal] || 0;
             const prevCost = costTable[currentVal - 1] || 0;
-            const diff = currentCost - prevCost; // Points à rendre
+            const diff = currentCost - prevCost;
 
             this.state.stats[statName]--;
             this.state.availablePoints += diff;
-
             this.calculateDerivedStats();
             this.saveCharacter();
             return true;
         }
+
+        // --- Gestion des Compétences ---
+
+        /**
+         * Ajoute ou retire une compétence (Toggle).
+         * Vérifie si le joueur a assez de points ou si c'est une compétence de classe.
+         */
+        toggleSkill(skillId) {
+            const index = this.state.skills.indexOf(skillId);
+
+            if (index > -1) {
+                // Remove
+                this.state.skills.splice(index, 1);
+            } else {
+                // Add
+                // Check Max Points (Simple logic: Max 2 free choices + Class skills)
+                // Need to know which are class skills to ignore them in count?
+                // For simplicity, we just allow toggling. Validation can happen in UI or here if data available.
+                // Let's assume unlimited for now or implement a cap if `EdvardSkills` is available.
+                if (window.EdvardSkills) {
+                    const classSkills = (this.state.specialization && window.EdvardSkills.classBonus[this.state.specialization]) || [];
+                    const isClassSkill = classSkills.includes(skillId);
+
+                    if (!isClassSkill) {
+                        // Check free points used
+                        const currentFree = this.state.skills.filter(s => !classSkills.includes(s)).length;
+                        if (currentFree >= window.EdvardSkills.baseFreePoints) {
+                            return false; // Limit reached
+                        }
+                    }
+                }
+
+                this.state.skills.push(skillId);
+            }
+
+            this.saveCharacter();
+            return true;
+        }
+
+        getAvailableSkillPoints() {
+             if (window.EdvardSkills) {
+                const classSkills = (this.state.specialization && window.EdvardSkills.classBonus[this.state.specialization]) || [];
+                const currentFree = this.state.skills.filter(s => !classSkills.includes(s)).length;
+                return Math.max(0, window.EdvardSkills.baseFreePoints - currentFree);
+             }
+             return 0;
+        }
+
+        // -------------------------------
 
         _getCostTable() {
             return {
@@ -190,13 +220,15 @@
 
         setRace(raceId) {
             this.state.race = raceId;
-            // Recalculer derived stats car la race change la constitution potentiellement
             this.calculateDerivedStats();
             this.saveCharacter();
         }
 
         setSpecialization(specId) {
             this.state.specialization = specId;
+            // Clear skills potentially invalid for new class? Or keep them?
+            // Reset skills on class change is safer.
+            this.state.skills = [];
             this.saveCharacter();
         }
 
@@ -208,10 +240,7 @@
         }
 
         saveCharacter() {
-            // On sauvegarde l'état brut (sans effectiveStats qui est calculé)
             localStorage.setItem(this.storageKey, JSON.stringify(this.state));
-
-            // Pour l'event, on envoie l'état enrichi pour que l'UI n'ait pas à recalculer
             const fullState = this.getState();
             const event = new CustomEvent('characterStateUpdated', { detail: fullState });
             window.dispatchEvent(event);

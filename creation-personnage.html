@@ -11,6 +11,7 @@
 
     <!-- Scripts Logique (Ordre Important) -->
     <script src="js/utils.js"></script>
+    <script src="js/skills-data.js"></script>
     <script src="js/character-manager.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="js/pdf-generator.js"></script>
@@ -64,7 +65,6 @@
             </div>
 
             <div class="download-section">
-                <!-- Les boutons de téléchargement sont gérés dans l'étape finale maintenant, mais on peut garder un raccourci ici si voulu -->
             </div>
         </section>
 
@@ -305,11 +305,13 @@
                 </div>
             </section>
 
-            <!-- Étape 4 (Compétences) et 6 (Équipement) simplifiées pour la démo, mais on garde la structure -->
             <section class="creation-section" id="etape4">
-                <h2><span class="step-number">4</span> Compétences (À Venir)</h2>
+                <h2><span class="step-number">4</span> Compétences</h2>
                 <div class="step-content">
-                    <p>Cette section est en cours de refonte pour utiliser le nouveau système dynamique.</p>
+                    <p>Choisissez vos compétences. Vous avez <span id="free-skill-points">2</span> points libres.</p>
+                    <div id="skills-container" class="skills-grid">
+                        <!-- Compétences injectées par JS -->
+                    </div>
                 </div>
                 <div class="step-navigation">
                     <button class="prev-step">Retour</button>
@@ -392,7 +394,7 @@
     <!-- Script principal de logique (qui fait le lien) -->
     <script src="js/character-creation-logic.js"></script>
 
-    <!-- Gestion Navigation Étapes (Script simple inline pour gérer l'affichage des sections) -->
+    <!-- Gestion Navigation Étapes -->
     <script>
         const steps = document.querySelectorAll('.creation-section');
         const dots = document.querySelectorAll('.progress-steps .step');
@@ -405,7 +407,6 @@
             steps[index].classList.add('active');
             dots[index].classList.add('active');
 
-            // Scroll top
             window.scrollTo(0, 0);
         }
 
@@ -427,7 +428,6 @@
             });
         });
 
-        // Clic sur les dots
         dots.forEach((dot, idx) => {
             dot.addEventListener('click', () => {
                 currentStep = idx;

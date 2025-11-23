@@ -1,5 +1,5 @@
 // Logique principale de la création de personnage
-// Dépend de utils.js et character-manager.js
+// Dépend de utils.js, skills-data.js et character-manager.js
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialisation du Manager
@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
         statCards: document.querySelectorAll('.characteristic-card'),
         raceCards: document.querySelectorAll('.race-card'),
         specCards: document.querySelectorAll('.spec-card'),
+        skillsContainer: document.getElementById('skills-container'),
+        freeSkillPointsDisplay: document.getElementById('free-skill-points'),
         inputs: {
             name: document.getElementById('charName'),
             age: document.getElementById('charAge'),
@@ -26,30 +28,26 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     function updateStatsUI() {
         const state = charManager.getState();
-        const effectiveStats = state.effectiveStats; // Stats avec bonus raciaux
+        const effectiveStats = state.effectiveStats;
 
-        // Mise à jour des points disponibles
         if(uiElements.pointsDisplay) {
             uiElements.pointsDisplay.textContent = state.availablePoints;
         }
 
-        // Mise à jour de chaque carte de stat
         uiElements.statCards.forEach(card => {
             const statName = card.dataset.stat;
             const baseVal = state.stats[statName];
             const effectiveVal = effectiveStats[statName];
             const bonus = effectiveVal - baseVal;
 
-            // Valeur affichée (Finale)
             const valSpan = card.querySelector('.char-value');
             if(valSpan) {
                 valSpan.textContent = effectiveVal;
-                // Highlight si bonus
                 if(bonus > 0) {
                     valSpan.style.color = 'var(--primary-color)';
                     valSpan.title = `Base: ${baseVal}, Bonus Racial: +${bonus}`;
                 } else if(bonus < 0) {
-                    valSpan.style.color = 'var(--accent-color)'; // Orange/Red usually
+                    valSpan.style.color = 'var(--accent-color)';
                     valSpan.title = `Base: ${baseVal}, Malus Racial: ${bonus}`;
                 } else {
                     valSpan.style.color = '';
@@ -57,25 +55,91 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
 
-            // Modificateur (basé sur la valeur effective)
             const modSpan = card.querySelector('.mod-value');
             if(modSpan) {
                 const mod = window.EdvardUtils.calculateModifier(effectiveVal);
                 modSpan.textContent = window.EdvardUtils.formatModifier(mod);
             }
 
-            // Gestion des boutons (basés sur le coût de la valeur de base)
             const btnPlus = card.querySelector('.increase-stat');
             const btnMinus = card.querySelector('.decrease-stat');
 
             if(btnPlus) {
                 const nextCostDiff = window.EdvardUtils.costTable[baseVal + 1] - window.EdvardUtils.costTable[baseVal];
-                const isMax = baseVal >= 15; // Point Buy Max Limit logic (15 usually)
+                const isMax = baseVal >= 15;
                 btnPlus.disabled = isMax || state.availablePoints < nextCostDiff;
             }
 
             if(btnMinus) {
                 btnMinus.disabled = baseVal <= 8;
+            }
+        });
+
+        // Also update skills UI if visible/initialized
+        updateSkillsUI();
+    }
+
+    // --- Gestion des Compétences ---
+
+    function initSkillsUI() {
+        if (!uiElements.skillsContainer || !window.EdvardSkills) return;
+
+        uiElements.skillsContainer.innerHTML = ''; // Clear
+
+        window.EdvardSkills.list.forEach(skill => {
+            const card = document.createElement('div');
+            card.className = 'skill-card';
+            card.dataset.id = skill.id;
+            card.innerHTML = `
+                <div class="skill-header">
+                    <h4>${skill.name}</h4>
+                    <span class="skill-stat">(${skill.stat.substring(0,3).toUpperCase()})</span>
+                </div>
+                <p class="skill-desc">${skill.desc}</p>
+                <div class="skill-status"><i class="fas fa-check"></i></div>
+            `;
+
+            card.addEventListener('click', () => {
+                if (charManager.toggleSkill(skill.id)) {
+                    updateSkillsUI();
+                }
+            });
+
+            uiElements.skillsContainer.appendChild(card);
+        });
+
+        updateSkillsUI();
+    }
+
+    function updateSkillsUI() {
+        if (!uiElements.skillsContainer) return;
+
+        const state = charManager.getState();
+        const availablePoints = charManager.getAvailableSkillPoints();
+        const classSkills = (state.specialization && window.EdvardSkills.classBonus[state.specialization]) || [];
+
+        // Update Free Points Display
+        if (uiElements.freeSkillPointsDisplay) {
+            uiElements.freeSkillPointsDisplay.textContent = availablePoints;
+        }
+
+        // Update Cards status
+        const cards = uiElements.skillsContainer.querySelectorAll('.skill-card');
+        cards.forEach(card => {
+            const skillId = card.dataset.id;
+            const isSelected = state.skills.includes(skillId);
+            const isClass = classSkills.includes(skillId);
+
+            card.classList.remove('selected', 'class-skill', 'disabled');
+
+            if (isSelected) {
+                card.classList.add('selected');
+                if (isClass) card.classList.add('class-skill');
+            } else {
+                // Check if disabled (no points left and not class skill)
+                if (availablePoints <= 0 && !isClass) {
+                    card.classList.add('disabled');
+                }
             }
         });
     }
@@ -85,38 +149,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // 1. Caractéristiques
     uiElements.statCards.forEach(card => {
         const statName = card.dataset.stat;
-
         const btnPlus = card.querySelector('.increase-stat');
         const btnMinus = card.querySelector('.decrease-stat');
-
-        if (btnPlus) {
-            btnPlus.addEventListener('click', () => {
-                if (charManager.increaseStat(statName)) {
-                    updateStatsUI();
-                }
-            });
-        }
-
-        if (btnMinus) {
-            btnMinus.addEventListener('click', () => {
-                if (charManager.decreaseStat(statName)) {
-                    updateStatsUI();
-                }
-            });
-        }
+        if (btnPlus) btnPlus.addEventListener('click', () => { if (charManager.increaseStat(statName)) updateStatsUI(); });
+        if (btnMinus) btnMinus.addEventListener('click', () => { if (charManager.decreaseStat(statName)) updateStatsUI(); });
     });
 
     // 2. Race Selection
     uiElements.raceCards.forEach(card => {
         card.addEventListener('click', () => {
-            // Visuel selection
             uiElements.raceCards.forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
-
             const race = card.dataset.race;
             charManager.setRace(race);
-
-            // Important: Refresh stats UI because modifiers might change
             updateStatsUI();
         });
     });
@@ -126,8 +171,6 @@ document.addEventListener('DOMContentLoaded', function() {
         card.addEventListener('click', () => {
             uiElements.specCards.forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
-
-            // Mapping simple titre -> key
             const title = card.querySelector('h3').textContent;
             const map = {
                 'Techno-Guerrier': 'techno-guerrier',
@@ -136,8 +179,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Infiltrateur': 'infiltrateur'
             };
             const key = map[title] || title.toLowerCase();
-
             charManager.setSpecialization(key);
+
+            // Re-eval skills when class changes
+            updateSkillsUI();
         });
     });
 
@@ -155,11 +200,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Restauration UI depuis Etat ---
     function restoreUI() {
         const state = charManager.getState();
-
-        // Update Stats (will handle effectives)
         updateStatsUI();
 
-        // Restore Race Selection
         if(state.race) {
             const card = document.querySelector(`.race-card[data-race="${state.race}"]`);
             if(card) {
@@ -168,7 +210,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Restore Spec
         if(state.specialization) {
             const mapInv = {
                 'techno-guerrier': 'Techno-Guerrier',
@@ -187,7 +228,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Restore Inputs
         if(state.lore) {
             if(uiElements.inputs.name) uiElements.inputs.name.value = state.lore.name || '';
             if(uiElements.inputs.age) uiElements.inputs.age.value = state.lore.age || '';
@@ -195,16 +235,14 @@ document.addEventListener('DOMContentLoaded', function() {
             if(uiElements.inputs.background) uiElements.inputs.background.value = state.lore.background || '';
             if(uiElements.inputs.appearance) uiElements.inputs.appearance.value = state.lore.appearance || '';
         }
+
+        // Init Skills
+        initSkillsUI();
     }
 
     // --- Boutons Sauvegarde / Chargement / PDF ---
-
     const btnSaveJson = document.getElementById('btn-save-json');
-    if(btnSaveJson) {
-        btnSaveJson.addEventListener('click', () => {
-            charManager.exportJSON();
-        });
-    }
+    if(btnSaveJson) btnSaveJson.addEventListener('click', () => charManager.exportJSON());
 
     const fileInput = document.getElementById('file-upload');
     if(fileInput) {
