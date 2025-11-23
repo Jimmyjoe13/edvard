@@ -44,7 +44,7 @@
                     appearance: ""
                 },
                 skills: [], // Tableau des IDs de compétences choisies
-                equipment: []
+                equipment: [] // Tableau des IDs d'objets (ou objets complets si besoin)
             };
 
             // Initialise derived stats
@@ -77,21 +77,23 @@
                 effectiveStats: effectiveStats
             };
         }
-      }
-    }
 
-    /**
-     * Retourne l'état complet du personnage avec les stats effectives ajoutées.
-     */
-    getState() {
-      // Calculer les stats effectives à la volée pour l'affichage
-      const effectiveStats = this.getEffectiveStats();
-      // On retourne une copie de l'état enrichie
-      return {
-        ...this.state,
-        effectiveStats: effectiveStats,
-      };
-    }
+        /**
+         * Calcule les stats finales (Base + Racial).
+         */
+        getEffectiveStats() {
+            const effective = { ...this.state.stats };
+
+            if (this.state.race && this.racialBonuses[this.state.race]) {
+                const bonuses = this.racialBonuses[this.state.race].stats;
+                for (const [stat, bonus] of Object.entries(bonuses)) {
+                    if (effective[stat] !== undefined) {
+                        effective[stat] += bonus;
+                    }
+                }
+            }
+            return effective;
+        }
 
         /**
          * Calcule les stats dérivées (HP, Credits, etc.)
@@ -107,9 +109,6 @@
                 this.state.derived.credits = 100;
             }
         }
-      }
-      return effective;
-    }
 
         loadState(newState) {
             if (!newState) return;
@@ -122,6 +121,9 @@
             if (newState.lore) this.state.lore = { ...this.state.lore, ...newState.lore };
             if (newState.skills) this.state.skills = [...newState.skills];
 
+            // Equipment loading
+            if (newState.equipment) this.state.equipment = [...newState.equipment];
+
             this.calculateDerivedStats();
             this.saveCharacter();
         }
@@ -130,13 +132,11 @@
             const currentVal = this.state.stats[statName];
             if (currentVal >= 15) return false;
 
-      const costTable = window.EdvardUtils
-        ? window.EdvardUtils.costTable
-        : this._getCostTable();
+            const costTable = window.EdvardUtils ? window.EdvardUtils.costTable : this._getCostTable();
 
-      const currentCost = costTable[currentVal] || 0;
-      const nextCost = costTable[currentVal + 1] || 0;
-      const diff = nextCost - currentCost;
+            const currentCost = costTable[currentVal] || 0;
+            const nextCost = costTable[currentVal + 1] || 0;
+            const diff = nextCost - currentCost;
 
             if (this.state.availablePoints >= diff) {
                 this.state.stats[statName]++;
@@ -152,9 +152,7 @@
             const currentVal = this.state.stats[statName];
             if (currentVal <= 8) return false;
 
-      const costTable = window.EdvardUtils
-        ? window.EdvardUtils.costTable
-        : this._getCostTable();
+            const costTable = window.EdvardUtils ? window.EdvardUtils.costTable : this._getCostTable();
 
             const currentCost = costTable[currentVal] || 0;
             const prevCost = costTable[currentVal - 1] || 0;
@@ -169,38 +167,25 @@
 
         // --- Gestion des Compétences ---
 
-        /**
-         * Ajoute ou retire une compétence (Toggle).
-         * Vérifie si le joueur a assez de points ou si c'est une compétence de classe.
-         */
         toggleSkill(skillId) {
             const index = this.state.skills.indexOf(skillId);
 
             if (index > -1) {
-                // Remove
                 this.state.skills.splice(index, 1);
             } else {
-                // Add
-                // Check Max Points (Simple logic: Max 2 free choices + Class skills)
-                // Need to know which are class skills to ignore them in count?
-                // For simplicity, we just allow toggling. Validation can happen in UI or here if data available.
-                // Let's assume unlimited for now or implement a cap if `EdvardSkills` is available.
                 if (window.EdvardSkills) {
                     const classSkills = (this.state.specialization && window.EdvardSkills.classBonus[this.state.specialization]) || [];
                     const isClassSkill = classSkills.includes(skillId);
 
                     if (!isClassSkill) {
-                        // Check free points used
                         const currentFree = this.state.skills.filter(s => !classSkills.includes(s)).length;
                         if (currentFree >= window.EdvardSkills.baseFreePoints) {
-                            return false; // Limit reached
+                            return false;
                         }
                     }
                 }
-
                 this.state.skills.push(skillId);
             }
-
             this.saveCharacter();
             return true;
         }
@@ -212,6 +197,15 @@
                 return Math.max(0, window.EdvardSkills.baseFreePoints - currentFree);
              }
              return 0;
+        }
+
+        // --- Gestion de l'Équipement ---
+
+        setEquipment(weaponId, armorId) {
+            this.state.equipment = [];
+            if(weaponId) this.state.equipment.push(weaponId);
+            if(armorId) this.state.equipment.push(armorId);
+            this.saveCharacter();
         }
 
         // -------------------------------
@@ -231,18 +225,16 @@
 
         setSpecialization(specId) {
             this.state.specialization = specId;
-            // Clear skills potentially invalid for new class? Or keep them?
-            // Reset skills on class change is safer.
             this.state.skills = [];
             this.saveCharacter();
         }
 
-    updateLore(key, value) {
-      if (this.state.lore.hasOwnProperty(key)) {
-        this.state.lore[key] = value;
-        this.saveCharacter();
-      }
-    }
+        updateLore(key, value) {
+            if (this.state.lore.hasOwnProperty(key)) {
+                this.state.lore[key] = value;
+                this.saveCharacter();
+            }
+        }
 
         saveCharacter() {
             localStorage.setItem(this.storageKey, JSON.stringify(this.state));
@@ -251,36 +243,32 @@
             window.dispatchEvent(event);
         }
 
-    exportJSON() {
-      const dataStr =
-        "data:text/json;charset=utf-8," +
-        encodeURIComponent(JSON.stringify(this.state, null, 2));
-      const downloadAnchorNode = document.createElement("a");
-      downloadAnchorNode.setAttribute("href", dataStr);
-      downloadAnchorNode.setAttribute(
-        "download",
-        (this.state.lore.name || "personnage") + ".json"
-      );
-      document.body.appendChild(downloadAnchorNode);
-      downloadAnchorNode.click();
-      downloadAnchorNode.remove();
-    }
-
-    importJSON(file, callback) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        try {
-          const parsed = JSON.parse(event.target.result);
-          this.loadState(parsed);
-          if (callback) callback(true);
-        } catch (e) {
-          console.error("Erreur parsing JSON", e);
-          if (callback) callback(false);
+        exportJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.state, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", (this.state.lore.name || "personnage") + ".json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
         }
-      };
-      reader.readAsText(file);
-    }
-  }
 
-  window.CharacterManager = CharacterManager;
+        importJSON(file, callback) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const parsed = JSON.parse(event.target.result);
+                    this.loadState(parsed);
+                    if(callback) callback(true);
+                } catch (e) {
+                    console.error("Erreur parsing JSON", e);
+                    if(callback) callback(false);
+                }
+            };
+            reader.readAsText(file);
+        }
+    }
+
+    window.CharacterManager = CharacterManager;
+
 })(window);
