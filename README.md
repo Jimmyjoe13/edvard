@@ -3,7 +3,7 @@
 ![Status](https://img.shields.io/badge/Status-Active-success)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Version](https://img.shields.io/badge/Version-1.0.0-orange)
-![Tech](https://img.shields.io/badge/Tech-HTML%20%7C%20CSS%20%7C%20JS-yellow)
+![Tech](https://img.shields.io/badge/Tech-React%20%7C%20Vite%20%7C%20TypeScript-blue)
 
 ## 📖 À propos
 
@@ -15,6 +15,8 @@
 - **Création de Personnage Interactive** : Un outil pas à pas pour créer votre avatar, calculant automatiquement les statistiques et permettant de sauvegarder ou d'exporter la fiche en PDF.
 - **Gestion d'Équipement** : Catalogue d'armes énergétiques, d'armures et d'implants.
 - **Règles Accessibles** : Consultation rapide des mécaniques de jeu.
+- **Table de jeu solo** : Créez une table, choisissez une fiche, composez une équipe de compagnons IA et lancez un scénario tactique. Votre partie est sauvegardée sur cet appareil.
+- **Approches à conséquences** : Choisissez comment aborder une mission et résolvez un test 2d10 avant le combat.
 
 ### 🎲 Pour les Maîtres de Jeu
 - **Bestiaire Détaillé** : Base de données de créatures avec statistiques et descriptions.
@@ -23,32 +25,36 @@
 
 ## 🚀 Installation & Usage
 
-Ce projet est conçu pour être simple et sans dépendances lourdes.
+Le site utilise Vite pour servir l’accueil React et préserver les rubriques HTML historiques.
 
 ### Prérequis
+- Node.js compatible avec Vite 8 et npm.
 - Un navigateur web moderne (Chrome, Firefox, Safari, Edge).
 
-### Installation Locale
-1. Clonez le dépôt :
-   ```bash
-   git clone https://github.com/votre-username/projet-edvard.git
-   ```
-2. Naviguez dans le dossier du projet :
-   ```bash
-   cd projet-edvard
-   ```
-3. Ouvrez `index.html` dans votre navigateur.
-   - *Astuce : Pour une meilleure expérience (notamment pour éviter les problèmes de CORS avec certains assets ou modules JS futurs), utilisez une extension "Live Server" ou lancez un simple serveur python :*
-     ```bash
-     python3 -m http.server 8000
-     ```
-     Puis accédez à `http://localhost:8000`.
+### Développement local
+```bash
+npm install
+npm run dev
+```
+
+Le serveur de développement est configuré sur `http://localhost:3000`.
+
+Les fiches et parties de la première version sont enregistrées dans le stockage local du navigateur ; elles ne sont pas encore partagées entre appareils.
+
+### Build de production
+```bash
+npm run build
+npm run preview
+```
+
+Le site compilé se trouve dans `dist/`. Le build inclut l’accueil React, la table virtuelle, les pages historiques et leurs ressources.
 
 ## 📁 Structure du Projet
 
 ```
 projet-edvard/
-├── css/                  # Feuilles de style
+├── src/                  # Application React, composants et données de jeu
+├── css/                  # Feuilles de style des pages historiques
 │   ├── styles.css        # Styles globaux
 │   ├── character-creation.css
 │   └── ...
@@ -58,7 +64,7 @@ projet-edvard/
 │   └── ...
 ├── images/               # Assets graphiques
 ├── resources/            # PDFs, Fiches, Scénarios
-├── *.html                # Pages du site
+├── *.html                # Pages historiques du site
 └── README.md
 ```
 
