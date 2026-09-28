@@ -211,7 +211,10 @@ function initializeMapPoints() {
     const mapContainer = document.querySelector('.map-container');
     if (!mapContainer) return;
 
+    // La page peut declarer ses points directement en HTML (.map-points-container).
+    // Dans ce cas on ne genere rien, pour eviter un doublon.
     const pointsContainer = mapContainer.querySelector('.map-points');
+    if (!pointsContainer) return;
 
     mapPoints.forEach(point => {
         const pointElement = document.createElement('div');

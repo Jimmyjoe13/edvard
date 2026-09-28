@@ -97,6 +97,35 @@
     border-color: var(--accent-color);
 }
 
+.origin-bonus-picker {
+    margin: 1.25rem 0 0;
+    padding: 1rem;
+    border: 1px solid rgba(0, 255, 136, 0.28);
+    border-radius: 12px;
+    background: rgba(0, 255, 136, 0.04);
+}
+
+.origin-bonus-picker.hidden {
+    display: none;
+}
+
+.origin-bonus-picker legend {
+    padding: 0 0.5rem;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.origin-bonus-choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.step-navigation button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
 .race-header {
     display: flex;
     justify-content: space-between;
