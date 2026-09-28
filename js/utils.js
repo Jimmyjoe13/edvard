@@ -44,7 +44,7 @@ window.EdvardUtils = {
     /**
      * Table des coûts pour l'achat de caractéristiques (Point Buy).
      */
-    costTable: {
+    costTable: window.EdvardRules ? window.EdvardRules.characterCreation.pointCosts : {
         8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5,
         14: 7, 15: 9, 16: 11, 17: 13, 18: 15
     }
