@@ -101,7 +101,7 @@ export const RulebookPage: React.FC = () => {
         <nav className="rulebook-nav" aria-label="Navigation principale">
           <Link to="/">Accueil</Link>
           <a className="is-active" href="#reference">Règles</a>
-          <a href="/creation-personnage.html">Personnage</a>
+          <Link to="/creation-personnage">Personnage</Link>
           <a href="/scenarios.html">Scénarios</a>
           <Link className="rulebook-nav__table" to="/table"><Dices size={16} /> À la table</Link>
         </nav>

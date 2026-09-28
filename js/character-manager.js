@@ -10,31 +10,18 @@
             // Configuration de base
             this.storageKey = 'edvard_character_autosave';
 
-            // Bonus raciaux définis
-            this.racialBonuses = {
-                'humain': { stats: {}, free: 2 },
-                'sylvain': { stats: { 'sagesse': 2, 'constitution': 1 } },
-                'neo-forge': { stats: { 'intelligence': 2, 'force': 1 } },
-                'skarn': { stats: { 'force': 2, 'constitution': 1 } },
-                'ether-born': { stats: { 'intelligence': 2, 'charisme': 1, 'constitution': -1 } }
-            };
+            this.rules = window.EdvardRules;
 
             // État initial
             this.state = {
-                availablePoints: 27,
-                stats: {
-                    force: 8,
-                    agilite: 8,
-                    constitution: 8,
-                    intelligence: 8,
-                    sagesse: 8,
-                    charisme: 8
-                },
+                availablePoints: this.rules.characterCreation.initialAttributePoints,
+                stats: Object.fromEntries(this.rules.attributes.map(({ id }) => [id, this.rules.characterCreation.minimumAttribute])),
                 derived: {
                     hp: 10,
                     credits: 0
                 },
                 race: null,
+                originBonusChoices: [],
                 specialization: null,
                 lore: {
                     name: "",
@@ -55,15 +42,11 @@
         }
 
         initialize() {
-            const saved = localStorage.getItem(this.storageKey);
+            const saved = window.EdvardCharacterStorage.readLegacyState();
             if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    this.loadState(parsed);
-                    console.log("Personnage chargé depuis la sauvegarde automatique.");
-                } catch (e) {
-                    console.error("Erreur chargement sauvegarde:", e);
-                }
+                this.loadState(saved);
+                window.EdvardCharacterStorage.writeLegacyState(this.state);
+                console.log("Personnage chargé depuis la sauvegarde partagée.");
             }
         }
 
@@ -84,15 +67,37 @@
         getEffectiveStats() {
             const effective = { ...this.state.stats };
 
-            if (this.state.race && this.racialBonuses[this.state.race]) {
-                const bonuses = this.racialBonuses[this.state.race].stats;
+            const origin = this.rules.origins.find((item) => item.id === this.state.race);
+            if (origin) {
+                const bonuses = origin.bonus;
                 for (const [stat, bonus] of Object.entries(bonuses)) {
                     if (effective[stat] !== undefined) {
                         effective[stat] += bonus;
                     }
                 }
+                this.state.originBonusChoices.forEach((stat) => {
+                    if (effective[stat] !== undefined) effective[stat] += 1;
+                });
             }
             return effective;
+        }
+
+        toggleOriginBonus(statId) {
+            const origin = this.rules.origins.find((item) => item.id === this.state.race);
+            if (!origin || !this.rules.attributes.some((attribute) => attribute.id === statId)) return false;
+
+            const current = this.state.originBonusChoices;
+            if (current.includes(statId)) {
+                this.state.originBonusChoices = current.filter((stat) => stat !== statId);
+            } else if (current.length < origin.flexibleBonusCount) {
+                this.state.originBonusChoices = [...current, statId];
+            } else {
+                return false;
+            }
+
+            this.calculateDerivedStats();
+            this.saveCharacter();
+            return true;
         }
 
         /**
@@ -115,6 +120,7 @@
 
             if (newState.availablePoints !== undefined) this.state.availablePoints = newState.availablePoints;
             if (newState.race) this.state.race = newState.race;
+            if (Array.isArray(newState.originBonusChoices)) this.state.originBonusChoices = [...newState.originBonusChoices];
             if (newState.specialization) this.state.specialization = newState.specialization;
 
             if (newState.stats) this.state.stats = { ...this.state.stats, ...newState.stats };
@@ -179,7 +185,9 @@
 
                     if (!isClassSkill) {
                         const currentFree = this.state.skills.filter(s => !classSkills.includes(s)).length;
-                        if (currentFree >= window.EdvardSkills.baseFreePoints) {
+                        const origin = this.rules.origins.find((item) => item.id === this.state.race);
+                        const freePoints = window.EdvardSkills.baseFreePoints + (origin ? origin.freeSkillBonus : 0);
+                        if (currentFree >= freePoints) {
                             return false;
                         }
                     }
@@ -194,7 +202,9 @@
              if (window.EdvardSkills) {
                 const classSkills = (this.state.specialization && window.EdvardSkills.classBonus[this.state.specialization]) || [];
                 const currentFree = this.state.skills.filter(s => !classSkills.includes(s)).length;
-                return Math.max(0, window.EdvardSkills.baseFreePoints - currentFree);
+                const origin = this.rules.origins.find((item) => item.id === this.state.race);
+                const freePoints = window.EdvardSkills.baseFreePoints + (origin ? origin.freeSkillBonus : 0);
+                return Math.max(0, freePoints - currentFree);
              }
              return 0;
         }
@@ -218,6 +228,7 @@
         }
 
         setRace(raceId) {
+            if (this.state.race !== raceId) this.state.originBonusChoices = [];
             this.state.race = raceId;
             this.calculateDerivedStats();
             this.saveCharacter();
@@ -237,7 +248,7 @@
         }
 
         saveCharacter() {
-            localStorage.setItem(this.storageKey, JSON.stringify(this.state));
+            window.EdvardCharacterStorage.writeLegacyState(this.state);
             const fullState = this.getState();
             const event = new CustomEvent('characterStateUpdated', { detail: fullState });
             window.dispatchEvent(event);

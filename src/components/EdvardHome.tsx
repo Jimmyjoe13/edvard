@@ -24,7 +24,7 @@ const journeys = [
     title: 'Forgez votre légende.',
     description: 'Créez un personnage, équipez-le et gardez les règles utiles à portée de main.',
     action: 'Créer un personnage',
-    href: '/creation-personnage.html',
+    href: '/creation-personnage',
     image: gameAssets.humanPortrait,
     icon: Shield,
     className: 'journey-card--player',
@@ -139,21 +139,30 @@ export const EdvardHome: React.FC = () => {
         </div>
 
         <div className="edvard-journey-grid">
-          {journeys.map(({ number, category, title, description, action, href, image, icon: Icon, className }) => (
-            <a className={`journey-card ${className}`} href={href} key={number}>
-              <img className="journey-card__image" src={image} alt="" loading="lazy" />
-              <span className="journey-card__shade" />
-              <span className="journey-card__topline">
-                <span>{number} / {category}</span>
-                <Icon size={19} aria-hidden="true" />
-              </span>
-              <span className="journey-card__copy">
-                <span className="journey-card__title">{title}</span>
-                <span className="journey-card__description">{description}</span>
-                <span className="journey-card__action">{action}<ArrowRight size={16} aria-hidden="true" /></span>
-              </span>
-            </a>
-          ))}
+          {journeys.map(({ number, category, title, description, action, href, image, icon: Icon, className }) => {
+            const card = (
+              <>
+                <img className="journey-card__image" src={image} alt="" loading="lazy" />
+                <span className="journey-card__shade" />
+                <span className="journey-card__topline">
+                  <span>{number} / {category}</span>
+                  <Icon size={19} aria-hidden="true" />
+                </span>
+                <span className="journey-card__copy">
+                  <span className="journey-card__title">{title}</span>
+                  <span className="journey-card__description">{description}</span>
+                  <span className="journey-card__action">{action}<ArrowRight size={16} aria-hidden="true" /></span>
+                </span>
+              </>
+            );
+
+            // Les parcours internes passent par le routeur, les pages statiques restent des liens.
+            return href.startsWith('/') && !href.includes('.html') ? (
+              <Link className={`journey-card ${className}`} to={href} key={number}>{card}</Link>
+            ) : (
+              <a className={`journey-card ${className}`} href={href} key={number}>{card}</a>
+            );
+          })}
         </div>
       </section>
 
@@ -179,7 +188,7 @@ export const EdvardHome: React.FC = () => {
         <div className="edvard-footer__links">
           <a href="/univers-lore.html">Univers</a>
           <Link to="/guide-de-table">Règles</Link>
-          <a href="/creation-personnage.html">Personnage</a>
+          <Link to="/creation-personnage">Personnage</Link>
           <a href="/scenarios.html">Scénarios</a>
           <Link to="/table">Table virtuelle</Link>
         </div>

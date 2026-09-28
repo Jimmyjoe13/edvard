@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useGameStore, RACES, Character } from '../store/gameStore';
-import { gameAssets } from '../data/assets';
+import { useGameStore, RACES } from '../store/gameStore';
 import { ATTRIBUTES, AttributeId, CHARACTER_CREATION, CharacterStats, getTotalAttributePointCost } from '../data/rules';
-import { SKILLS, WEAPONS, ARMORS } from '../data/gameData';
 import { characterStorage } from '../data/characterStorage';
+import { createCharacterFromRecord } from '../data/characterFactory';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dna, Shield, Zap, ChevronLeft, ChevronRight, Check, AlertTriangle, User } from 'lucide-react';
 
@@ -95,38 +94,19 @@ export const DNASequencer: React.FC = () => {
 
   const handleFinalize = () => {
       if (!name.trim()) return;
-      const finalStats = { ...stats };
-      Object.entries(selectedRace.bonus).forEach(([k, v]) => {
-          (finalStats as any)[k] += v;
-      });
-      flexibleBonusStats.forEach((stat) => { finalStats[stat] += 1; });
-
       const savedCharacter = characterStorage.read();
-      const skillIds = (savedCharacter?.skillIds || ['athletics']).filter((id) => SKILLS.some((skill) => skill.id === id));
-      const equipmentIds = (savedCharacter?.equipmentIds || ['assault-rifle', 'light-kevlar']).filter((id) => (
-          WEAPONS.some((weapon) => weapon.id === id) || ARMORS.some((armor) => armor.id === id)
-      ));
-      const equippedWeaponId = equipmentIds.find((id) => WEAPONS.some((weapon) => weapon.id === id)) || null;
-      const equippedArmorId = equipmentIds.find((id) => ARMORS.some((armor) => armor.id === id)) || null;
-      const newChar: Character = {
-          id: 'player-1',
-          name: name.trim().toUpperCase(),
-          avatar: selectedRaceId === 'neo-forge' ? gameAssets.neoForgeAvatar : gameAssets.humanAvatar,
-          level: 1, xp: 0, nextLevelXp: 100,
-          hp: 50 + (finalStats.constitution - 10) * 2,
-          maxHp: 50 + (finalStats.constitution - 10) * 2,
-          flux: 20 + (finalStats.intelligence - 10) * 2,
-          maxFlux: 20 + (finalStats.intelligence - 10) * 2,
-          ap: 1, maxAp: 1, mp: 6 + Math.floor((finalStats.agilite - 10) / 2),
-          maxMp: 6 + Math.floor((finalStats.agilite - 10) / 2),
-          isAI: false, race: selectedRace.name,
-          stats: finalStats,
-          inventory: equipmentIds,
-          equippedWeaponId, equippedArmorId,
-          skills: skillIds.length ? skillIds : ['athletics'], position: { x: 5, y: 15 }, statuses: [],
+      // Single source of truth: the shared factory turns a campaign-sheet record
+      // into the playable character, so both creation paths behave identically.
+      const newChar = createCharacterFromRecord({
+          name: name.trim(),
+          originId: selectedRaceId,
+          baseStats: stats,
+          flexibleBonusStats,
           specializationId: savedCharacter?.specializationId ?? null,
-          neuroCredits: 0, unlockedImplants: []
-      };
+          skillIds: savedCharacter?.skillIds,
+          equipmentIds: savedCharacter?.equipmentIds,
+          lore: { ...(savedCharacter?.lore || { name: '', age: '', origin: '', background: '', appearance: '' }), name: name.trim() },
+      });
       characterStorage.write({
           name: newChar.name,
           originId: selectedRaceId,

@@ -26,6 +26,82 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    const originSelection = document.querySelector('.race-selection');
+    const originBonusPicker = document.createElement('fieldset');
+    originBonusPicker.id = 'origin-bonus-picker';
+    originBonusPicker.className = 'origin-bonus-picker hidden';
+    originSelection?.insertAdjacentElement('afterend', originBonusPicker);
+
+    function syncOriginCards() {
+        uiElements.raceCards.forEach((card) => {
+            const origin = window.EdvardRules.origins.find((item) => item.id === card.dataset.race);
+            if (!origin) return;
+
+            const title = card.querySelector('.race-header h3');
+            const tagline = card.querySelector('.race-type');
+            const bonusList = card.querySelector('.race-details ul');
+            const description = card.querySelector('.race-details p');
+            if (title) title.textContent = origin.label;
+            if (tagline) tagline.textContent = origin.tagline;
+            if (description) description.textContent = origin.description;
+            if (bonusList) {
+                const bonuses = Object.entries(origin.bonus).map(([stat, value]) => {
+                    const attribute = window.EdvardRules.attributes.find((item) => item.id === stat);
+                    return `${value > 0 ? '+' : ''}${value} ${attribute ? attribute.label : stat}`;
+                });
+                if (origin.flexibleBonusCount) bonuses.push(`+1 à ${origin.flexibleBonusCount} caractéristiques au choix`);
+                if (origin.freeSkillBonus) bonuses.push(`+${origin.freeSkillBonus} compétence au choix`);
+                bonusList.replaceChildren(...bonuses.map((bonus) => {
+                    const item = document.createElement('li');
+                    item.textContent = bonus;
+                    return item;
+                }));
+            }
+        });
+    }
+
+    function renderOriginBonusPicker() {
+        const state = charManager.getState();
+        const origin = window.EdvardRules.origins.find((item) => item.id === state.race);
+        const nextButton = document.querySelector('#etape1 .next-step');
+        if (nextButton) {
+            nextButton.disabled = !origin || state.originBonusChoices.length !== origin.flexibleBonusCount;
+        }
+        if (!origin || !origin.flexibleBonusCount) {
+            originBonusPicker.classList.add('hidden');
+            originBonusPicker.replaceChildren();
+            return;
+        }
+
+        originBonusPicker.classList.remove('hidden');
+        originBonusPicker.replaceChildren();
+        const legend = document.createElement('legend');
+        legend.textContent = `Bonus humain — choisissez ${origin.flexibleBonusCount} caractéristiques (+1 chacune)`;
+        originBonusPicker.appendChild(legend);
+
+        const choices = document.createElement('div');
+        choices.className = 'origin-bonus-choices';
+        window.EdvardRules.attributes.forEach((attribute) => {
+            const selected = state.originBonusChoices.includes(attribute.id);
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = `control-btn small${selected ? ' selected' : ''}`;
+            button.textContent = `${attribute.label}${selected ? ' +1' : ''}`;
+            button.setAttribute('aria-pressed', String(selected));
+            button.disabled = !selected && state.originBonusChoices.length >= origin.flexibleBonusCount;
+            button.addEventListener('click', () => {
+                if (charManager.toggleOriginBonus(attribute.id)) {
+                    renderOriginBonusPicker();
+                    updateStatsUI();
+                }
+            });
+            choices.appendChild(button);
+        });
+        originBonusPicker.appendChild(choices);
+    }
+
+    syncOriginCards();
+
     /**
      * Met à jour l'affichage des caractéristiques et des points.
      */
@@ -241,6 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
             card.classList.add('selected');
             const race = card.dataset.race;
             charManager.setRace(race);
+            renderOriginBonusPicker();
             updateStatsUI();
         });
     });
@@ -278,6 +355,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Restauration UI depuis Etat ---
     function restoreUI() {
         const state = charManager.getState();
+        renderOriginBonusPicker();
         updateStatsUI();
 
         if(state.race) {
