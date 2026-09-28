@@ -16,17 +16,18 @@ La refonte part des parcours réels de jeu : découvrir et apprendre, créer un 
 ## État du dépôt observé
 
 - L’accueil React présente déjà les parcours joueurs, MJ et univers.
-- Le site conserve des pages HTML historiques pour la création, les règles, le bestiaire, l’équipement, les scénarios et le lore.
+- Le site conserve des pages HTML historiques pour les règles, le bestiaire, l’équipement, les scénarios et le lore ; la page de création historique ne renvoie plus que vers le parcours React.
 - La table React rassemble carte tactique, combat, missions, inventaire et création de personnage ; plusieurs données sont statiques.
 - La progression est sauvegardée localement dans plusieurs espaces séparés. Il n’y a pas encore de fiche de campagne partagée.
-- L’audit de dépôt a relevé 0 fichier de test et aucun pipeline CI.
+- Le dépôt contient trois suites de vérification automatisée (carnet, création, entrées) lancées par 
+pm test, sans pipeline CI.
 
 ## Écarts P0 avant de présenter les outils comme fiables
 
 1. **Deux moteurs de résolution.** Le livret de règles annonce 2d10 pour un test (regles.html, ligne 45), tandis que les raccourcis de compétences dans Nexus lancent un d20 (NexusVTT.tsx, ligne 173). Les attaques emploient aussi un d20 dans le store (gameStore.ts, ligne 190).
 2. **Deux catalogues d’origines.** Le créateur historique propose Humain, Sylvaïn, Néo-Forgé, Skarn et Éthéré (creation-personnage.html, lignes 78–155). Le prototype React en propose quatre et remplace Néo-Forgé / Éthéré par Synthétique (gameStore.ts, lignes 121–126).
-3. **Créateurs séparés.** L’accueil dirige vers le créateur HTML ; la table démarre son propre séquenceur React. Leurs statistiques, équipements et sauvegardes ne sont pas encore un même personnage.
-4. **Création et démonstration mêlées.** Valider le séquenceur React démarre immédiatement une mission et ajoute un adversaire de démonstration (gameStore.ts, lignes 432–446). La création d’une fiche doit être une action autonome.
+3. **Créateurs séparés.** L’accueil dirigeait vers le créateur HTML et la table démarrait son propre séquenceur React, sans personnage commun. Traité : un point d’entrée unique (/creation-personnage) alimente la table et écrit la fiche commune.
+4. **Création et démonstration mêlées.** Valider le séquenceur React démarrait immédiatement une mission avec un adversaire de démonstration. Traité : la création est une action autonome, sans mission ni adversaire ajoutés.
 5. **Formules de personnage incomplètes.** Les points de caractéristiques, compétences, ressources et défenses n’ont pas encore une définition unique utilisée par la fiche, les règles et la table.
 
 **Référence provisoire de cette première livraison :** le livret de règles actuellement publié. Les outils nouveaux doivent reproduire ses mécaniques jusqu’à leur validation lors de parties tests. Ce choix ne tranche pas les paramètres qui manquent au livret.
@@ -40,10 +41,13 @@ La nouvelle référence rapide reprend encore le contenu du livret dans un fichi
 - [x] Ajouter une référence de table interactive : recherche, filtres, difficultés, synergies et calculateur de test 2d10 fondé sur le livret publié.
 - [x] Introduire un premier catalogue commun aux interfaces React et historiques : origines, point-buy, compétences, équipement, difficultés et résolution 2d10.
 - [x] Introduire une fiche locale partagée par les deux créateurs, avec migration depuis la sauvegarde historique.
-- [ ] Terminer l’alignement des parcours de création et relier tous les états de table à cette fiche commune.
+- [x] Aligner la résolution des tests et des attaques sur le 2d10 du livret dans toute la table React.
+- [x] Terminer l’alignement des parcours de création et relier les états de table à cette fiche commune.
 - [ ] Définir avec des parties tests les valeurs encore manquantes : rang d’une compétence, ressources dérivées, défense, dégâts et progression.
 - [x] Séparer la création de la fiche du démarrage automatique d’une mission de démonstration.
-- [ ] Migrer toutes les entrées joueur vers un parcours unique et faire valider la fiche commune en parties tests.
+- [x] Migrer toutes les entrées joueur vers un parcours unique (/creation-personnage), y compris les pages HTML historiques.
+- [ ] Faire valider la fiche commune en parties tests.
+- [x] Enregistrer chaque décision de dialogue dans un carnet de campagne et en afficher les conséquences à la reprise.
 
 **Critères :** une même valeur de règle apparaît de façon cohérente dans le guide, le créateur et la table ; un joueur peut consulter une règle ou résoudre un test sans quitter sa séance.
 
@@ -120,10 +124,12 @@ Ce chantier s’appuie sur le modèle de règles commun (P0) et le personnage pe
 
 **Tranche 3 en cours — parcours initial de table :** depuis l’accueil, un joueur peut nommer une table, reprendre une fiche locale ou en créer une, choisir un ou deux compagnons IA, sélectionner l’un des trois scénarios et lancer une rencontre tactique. Le briefing propose deux approches ; les tests utilisent 2d10, la caractéristique et un bonus de compétence si elle est connue. Le résultat est détaillé et change la situation de départ : dégâts sur l’opposition ou sur le personnage, ou objectif informatique neutralisé. Chaque mission possède désormais une scène narrative après son affrontement principal : Blackout ouvre une récupération du noyau du drone, le Convoi impose de couper la balise du prototype et les Profondeurs isolent le signal de l’équipe disparue. Les choix de ces scènes peuvent terminer l’objectif final, modifier les ressources ou les drapeaux de campagne, et faire apparaître un objectif ainsi qu’une unité de renfort en cas d’échec. Les attaques utilisent la compétence d’arme, la défense calculée depuis l’Agilité et l’armure, la portée de l’arme et ses dés de dégâts ; l’initiative est 1d10 + Agilité. La partie, l’équipe, les objectifs, le dialogue et la mission active sont conservés localement ; les anciennes sessions actives sont converties à la reprise. Les alliés IA et l’opposition sont différenciés, les tours IA se poursuivent quel que soit le premier participant, la défaite permet de retenter la mission et les objectifs suivent les données du scénario. La zone sécurisée ne relance plus de combat sans opposition. Chaque mission terminée affiche un débrief avant de retourner au choix de la suite.
 
+**Parcours unique de création livré :** une seule adresse, `/creation-personnage`, mène à la création de fiche. L'accueil, le guide et les pages HTML historiques (règles, bestiaire, scénarios, univers, équipement) y renvoient ; `creation-personnage.html` n'est plus qu'une redirection. Le point d'entrée observe l'état de la table : sans table il lance la création, sur une table en préparation il passe en mode création, sur une table en cours il renvoie vers la table déjà configurée. La fiche produite alimente la table, et les états qui la relisent utilisent la même source.
+
 **Continuité de campagne livrée :** la table conserve les missions terminées, les drapeaux de conséquences et le dernier choix narratif. Les briefings des missions suivantes réagissent aux décisions précédentes ; l’écran de sélection rappelle la progression. Les sauvegardes antérieures sont normalisées à la reprise. La progression reste locale à l’appareil.
 
 **Limites restantes de cette tranche :** les choix modifient désormais les objectifs, les renforts, les rencontres et la continuité de campagne, mais ne changent pas encore la géométrie des cartes. L’ergonomie tactique mobile, la synchronisation entre appareils et les essais avec des rôlistes restent à faire. Les valeurs de bonus de compétence, de dégâts et de défense doivent être validées avec les règles et les tables tests.
 
 **Mesure de chargement :** après découpage par route, l’entrée React pèse 201 Ko (63 Ko gzip) et la table 211 Ko (63 Ko gzip), contre un unique chunk initial de 503 Ko (156 Ko gzip) avant séparation.
 
-**Prochain lot :** harmoniser les actions de combat avec les règles communes, renforcer la lecture de la reprise et de l’impact des décisions, puis faire tester la boucle complète et l’ergonomie tactique par des joueurs. Le premier parcours de jeu complet reste une aventure d’introduction reprenable.
+**Prochain lot :** faire valider la fiche commune en parties tests, en commençant par les valeurs encore manquantes (rang d'une compétence, ressources dérivées, défense, dégâts, progression). Ensuite : lien de reprise de partie, ergonomie tactique mobile, puis première aventure d'introduction complète. L'export et la modification d'une fiche déjà enregistrée restent à construire.
