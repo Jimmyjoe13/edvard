@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Atkinson Hyperlegible", sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --font-orbitron: "Orbitron", sans-serif;
+  --color-nexus-dark: #05050a;
+  --color-nexus-panel: #0a0a15;
+  --color-nexus-cyan: #00d2ff;
+  --color-nexus-purple: #bc13fe;
+}
+
+body {
+  margin: 0;
+  background-color: #020205;
+  color: #e0e0e0;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  min-width: 320px;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+/* --- TACTICAL ENGINE FX --- */
+
+.tactical-grid {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+}
+
+.grid-cell {
+    background: rgba(0, 210, 255, 0.02);
+    border: 0.5px solid rgba(0, 210, 255, 0.05);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.grid-cell:hover {
+    background: rgba(0, 210, 255, 0.1);
+    border-color: rgba(0, 210, 255, 0.4);
+    box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+    z-index: 10;
+}
+
+/* Cyberpunk Glassmorphism */
+.glass-panel {
+    background: rgba(10, 10, 25, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* Animations de combat */
+@keyframes beam {
+  0% { stroke-dashoffset: 100; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+.attack-beam {
+  stroke-dasharray: 20;
+  animation: beam 0.8s linear infinite;
+}
+
+@keyframes pulse-cyan {
+    0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(0, 210, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); }
+}
+
+.active-token {
+    animation: pulse-cyan 2s infinite;
+}
+
+/* Custom Scrollbar Sci-Fi */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0, 210, 255, 0.55); border-radius: 10px; }
+
+/* CRT Scanlines */
+.crt-overlay::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+              linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  z-index: 2;
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
+}
