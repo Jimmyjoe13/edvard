@@ -383,3 +383,16 @@ export const MISSIONS: Mission[] = [
     }
 ];
 import { gameAssets } from './assets';
+
+/**
+ * Traduit un drapeau technique de campagne en consequence lisible pour le joueur,
+ * en reutilisant le texte de briefing deja ecrit pour chaque mission.
+ */
+export const describeCampaignFlag = (flag: string | null | undefined): string | null => {
+    if (!flag) return null;
+    for (const mission of MISSIONS) {
+        const briefing = mission.campaignBriefings?.find((entry) => entry.requiresFlag === flag);
+        if (briefing) return briefing.node.text;
+    }
+    return null;
+};

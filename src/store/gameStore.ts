@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { MISSIONS, Mission, Objective, DialogueNode, MissionEffect } from '../data/missionData';
+import { MISSIONS, Mission, Objective, DialogueNode, MissionEffect, describeCampaignFlag } from '../data/missionData';
 import { IMPLANTS, Implant } from '../data/implantData';
 import { soundEngine } from '../utils/soundEngine';
 import { gameAssets } from '../data/assets';
@@ -49,6 +49,18 @@ export interface Character {
   unlockedImplants: string[];
 }
 
+export interface CampaignDecision {
+  missionId: string;
+  missionTitle: string;
+  choiceLabel: string;
+  succeeded: boolean;
+  outcome: string;
+  outcomeText: string;
+  consequenceText: string | null;
+  flag: string | null;
+  recordedAt: string;
+}
+
 export interface GameTable {
   id: string;
   name: string;
@@ -59,6 +71,7 @@ export interface GameTable {
   createdAt: string;
   completedMissionIds: string[];
   campaignFlags: string[];
+  decisionLog: CampaignDecision[];
   lastChoice: {
     missionId: string;
     choiceId: string;
@@ -568,6 +581,7 @@ export const useGameStore = create<GameState>()(persist<GameState, [], [], Persi
           createdAt: new Date().toISOString(),
           completedMissionIds: [],
           campaignFlags: [],
+          decisionLog: [],
           lastChoice: null,
       },
       characters: [], activeMission: null, dialogueQueue: [], turnOrder: [], currentTurnIndex: 0,
@@ -804,6 +818,20 @@ export const useGameStore = create<GameState>()(persist<GameState, [], [], Persi
               table: {
                   ...state.table,
                   campaignFlags: resultFlag ? [...new Set([...state.table.campaignFlags, resultFlag])] : state.table.campaignFlags,
+                  decisionLog: [
+                      {
+                          missionId: state.activeMission?.id || state.table.scenarioId || 'unknown',
+                          missionTitle: state.activeMission?.title || 'Mission inconnue',
+                          choiceLabel: choice.label,
+                          succeeded,
+                          outcome,
+                          outcomeText: succeeded ? choice.successText : choice.failureText,
+                          consequenceText: describeCampaignFlag(resultFlag),
+                          flag: resultFlag || null,
+                          recordedAt: new Date().toISOString(),
+                      },
+                      ...state.table.decisionLog,
+                  ].slice(0, 40),
                   lastChoice: {
                       missionId: state.activeMission?.id || state.table.scenarioId || 'unknown',
                       choiceId: choice.id,
@@ -898,6 +926,7 @@ export const useGameStore = create<GameState>()(persist<GameState, [], [], Persi
               createdAt: new Date().toISOString(),
               completedMissionIds: [],
               campaignFlags: [],
+              decisionLog: [],
               lastChoice: null,
           }
           : null;
@@ -907,6 +936,7 @@ export const useGameStore = create<GameState>()(persist<GameState, [], [], Persi
               ...savedTable,
               completedMissionIds: Array.isArray(savedTable.completedMissionIds) ? savedTable.completedMissionIds : [],
               campaignFlags: Array.isArray(savedTable.campaignFlags) ? savedTable.campaignFlags : [],
+              decisionLog: Array.isArray(savedTable.decisionLog) ? savedTable.decisionLog : [],
               lastChoice: savedTable.lastChoice || null,
           } as GameTable
           : legacyTable;

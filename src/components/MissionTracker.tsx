@@ -4,7 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Target, CheckCircle2, Circle } from 'lucide-react';
 
 export const MissionTracker: React.FC = () => {
-    const { activeMission } = useGameStore();
+    const { activeMission, table } = useGameStore();
+
+    const consequences = (table?.decisionLog ?? []).filter((entry) => entry.consequenceText).slice(0, 3);
 
     if (!activeMission) return null;
 
@@ -37,6 +39,21 @@ export const MissionTracker: React.FC = () => {
                     </motion.div>
                 ))}
             </div>
+
+            {consequences.length > 0 && (
+                <div className="mt-5 border-t border-white/10 pt-4">
+                    <div className="text-[8px] font-black text-nexus-cyan uppercase tracking-[0.3em]">CONSEQUENCES_CAMPAGNE</div>
+                    <ul className="mt-3 space-y-2">
+                        {consequences.map((entry) => (
+                            <li key={`${entry.missionId}-${entry.recordedAt}`} className="border-l-2 border-nexus-cyan/40 pl-2.5">
+                                <p className="text-[8px] font-mono uppercase tracking-widest text-gray-500">{entry.missionTitle}</p>
+                                <p className="mt-0.5 text-[10px] font-mono leading-relaxed text-gray-300">{entry.consequenceText}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
             <div className="mt-6 text-[8px] text-gray-600 font-mono text-center uppercase tracking-widest">
                 Client : {activeMission.client}
             </div>

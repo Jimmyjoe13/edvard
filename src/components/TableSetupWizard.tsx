@@ -62,6 +62,7 @@ export const TableSetupWizard: React.FC = () => {
   const selectedMission = MISSIONS.find((mission) => mission.id === table.scenarioId);
   const completedMissions = MISSIONS.filter((mission) => table.completedMissionIds.includes(mission.id));
   const lastChoiceMission = table.lastChoice ? MISSIONS.find((mission) => mission.id === table.lastChoice?.missionId) : undefined;
+  const recentDecisions = table.decisionLog.slice(0, 4);
 
   return (
     <main className="relative min-h-svh overflow-hidden bg-[#070910] px-4 py-7 text-white sm:px-8 sm:py-10">
@@ -87,17 +88,43 @@ export const TableSetupWizard: React.FC = () => {
           </p>
 
           {activeStep === 'scenario' && (
-            <aside aria-label="Progression de campagne" className="mt-6 flex flex-wrap items-start justify-between gap-4 rounded-2xl border border-cyan-100/15 bg-cyan-100/[.045] p-4 sm:items-center sm:p-5">
-              <div>
-                <p className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-cyan-100/70"><Sparkles size={14} /> Progression de campagne</p>
-                <p className="mt-2 text-sm font-semibold text-white">{completedMissions.length} mission{completedMissions.length === 1 ? '' : 's'} terminée{completedMissions.length === 1 ? '' : 's'} sur {MISSIONS.length}</p>
-                {completedMissions.length > 0 && <p className="mt-1 text-xs text-white/45">{completedMissions.map((mission) => mission.title).join(' · ')}</p>}
+            <aside aria-label="Carnet de campagne" className="mt-6 rounded-2xl border border-cyan-100/15 bg-cyan-100/[.045] p-4 sm:p-5">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-cyan-100/70"><Sparkles size={14} /> Progression de campagne</p>
+                  <p className="mt-2 text-sm font-semibold text-white">{completedMissions.length} mission{completedMissions.length === 1 ? '' : 's'} terminée{completedMissions.length === 1 ? '' : 's'} sur {MISSIONS.length}</p>
+                  {completedMissions.length > 0 && <p className="mt-1 text-xs text-white/45">{completedMissions.map((mission) => mission.title).join(' · ')}</p>}
+                </div>
+                {table.lastChoice && !recentDecisions.length && (
+                  <div className="max-w-xl border-l border-white/15 pl-4 text-sm">
+                    <p className="text-xs text-white/45">Votre dernier choix · {lastChoiceMission?.title || 'Mission précédente'}</p>
+                    <p className="mt-1 font-medium text-white/80">{table.lastChoice.label}</p>
+                    <p className={`mt-1 text-xs ${table.lastChoice.succeeded ? 'text-emerald-200/75' : 'text-amber-200/75'}`}>{table.lastChoice.outcome} — ses conséquences suivront votre équipe.</p>
+                  </div>
+                )}
               </div>
-              {table.lastChoice && (
-                <div className="max-w-xl border-l border-white/15 pl-4 text-sm">
-                  <p className="text-xs text-white/45">Votre dernier choix · {lastChoiceMission?.title || 'Mission précédente'}</p>
-                  <p className="mt-1 font-medium text-white/80">{table.lastChoice.label}</p>
-                  <p className={`mt-1 text-xs ${table.lastChoice.succeeded ? 'text-emerald-200/75' : 'text-amber-200/75'}`}>{table.lastChoice.outcome} — ses conséquences suivront votre équipe.</p>
+
+              {recentDecisions.length > 0 && (
+                <div className="mt-5 border-t border-white/10 pt-4">
+                  <p className="text-xs font-mono uppercase tracking-widest text-white/45">Carnet de décisions · {table.decisionLog.length} entr{table.decisionLog.length === 1 ? 'ée' : 'ées'}</p>
+                  <ol className="mt-3 space-y-2.5">
+                    {recentDecisions.map((decision) => (
+                      <li key={`${decision.missionId}-${decision.recordedAt}`} className="rounded-xl border border-white/8 bg-black/20 px-3.5 py-3">
+                        <div className="flex flex-wrap items-baseline justify-between gap-2">
+                          <p className="text-xs text-white/45">{decision.missionTitle}</p>
+                          <p className={`text-[11px] font-mono uppercase tracking-widest ${decision.succeeded ? 'text-emerald-200/80' : 'text-amber-200/80'}`}>{decision.succeeded ? 'Réussite' : 'Échec'}</p>
+                        </div>
+                        <p className="mt-1 text-sm font-medium text-white/85">{decision.choiceLabel}</p>
+                        <p className="mt-1 text-xs leading-5 text-white/50">{decision.outcomeText}</p>
+                        {decision.consequenceText && <p className="mt-1.5 border-l-2 border-cyan-200/40 pl-2.5 text-xs leading-5 text-cyan-100/70">{decision.consequenceText}</p>}
+                      </li>
+                    ))}
+                  </ol>
+                  {table.decisionLog.length > recentDecisions.length && (
+                    <p className="mt-3 text-xs text-white/35">
+                      {table.decisionLog.length - recentDecisions.length} décision{table.decisionLog.length - recentDecisions.length === 1 ? '' : 's'} antérieure{table.decisionLog.length - recentDecisions.length === 1 ? '' : 's'} conservée{table.decisionLog.length - recentDecisions.length === 1 ? '' : 's'} dans le carnet.
+                    </p>
+                  )}
                 </div>
               )}
             </aside>
