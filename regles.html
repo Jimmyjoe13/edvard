@@ -17,7 +17,7 @@
                 <li><a href="index.html">Accueil</a></li>
                 <li><a href="univers-lore.html">Univers & Lore</a></li>
                 <li><a href="regles.html" class="active">Règles</a></li>
-                <li><a href="creation-personnage.html">Création de Personnage</a></li>
+                <li><a href="/creation-personnage">Création de Personnage</a></li>
                 <li><a href="bestiaire.html">Bestiaire</a></li>
                 <li><a href="equipement.html">Équipement</a></li>
                 <li><a href="scenarios.html">Scénarios</a></li>
@@ -81,9 +81,11 @@
                         <h3>Attaques</h3>
                         <p>Pour toucher une cible :</p>
                         <ul>
-                            <li>2d10 + Compétence d'arme</li>
-                            <li>Contre la Défense de la cible</li>
-                            <li>Les bonus/malus situationnels s'appliquent</li>
+                            <li>2d10 + caractéristique liée à l'arme + compétence connue</li>
+                            <li>Mêlée : Force + Athlétisme ; à distance : Agilité + Tir</li>
+                            <li>La cible doit être dans la portée de l'arme, exprimée en cases</li>
+                            <li>Défense : 10 + Agilité de la cible + protection de son armure</li>
+                            <li>Les bonus et malus situationnels s'appliquent</li>
                         </ul>
                     </div>
 
@@ -91,9 +93,9 @@
                         <h3>Dégâts</h3>
                         <p>Les dégâts sont calculés ainsi :</p>
                         <ul>
-                            <li>Dégâts de l'arme + modificateurs</li>
-                            <li>Réduits par l'armure/protection</li>
-                            <li>Les effets critiques s'appliquent sur un 20 naturel</li>
+                            <li>Lancez les dés de dégâts indiqués par l'arme</li>
+                            <li>Soustrayez la protection de l'armure, avec un minimum de 1 dégât</li>
+                            <li>Double 10 : dégâts doublés ; double 1 : échec critique</li>
                         </ul>
                     </div>
                 </div>
@@ -180,6 +182,43 @@
         <p>&copy; 2024 Edvard RPG. Tous droits réservés.</p>
     </footer>
 
+    <script src="js/shared-rules.js"></script>
+    <script>
+        const rules = window.EdvardRules;
+        const difficultyList = document.querySelector('.difficulty-list');
+        if (difficultyList) {
+            difficultyList.replaceChildren(...rules.resolution.difficulties.map((difficulty) => {
+                const item = document.createElement('li');
+                item.textContent = `${difficulty.label} : ${difficulty.value}`;
+                return item;
+            }));
+        }
+
+        const ruleCards = [
+            ['#bases', 0, 'test'], ['#bases', 1, 'actions'],
+            ['#combat', 0, 'initiative'], ['#combat', 1, 'attaque'], ['#combat', 2, 'degats'],
+            ['#competences', 0, 'test'], ['#competences', 1, 'synergie'],
+            ['#technologie', 0, 'implants'], ['#technologie', 1, 'piratage'],
+            ['#experience', 0, 'experience'], ['#experience', 1, 'ameliorations']
+        ];
+
+        ruleCards.forEach(([sectionSelector, cardIndex, ruleId]) => {
+            const card = document.querySelectorAll(`${sectionSelector} .rule-card`)[cardIndex];
+            const rule = rules.rulebook.find((entry) => entry.id === ruleId);
+            if (!card || !rule) return;
+
+            const summary = card.querySelector('p');
+            const details = card.querySelector('ul:not(.difficulty-list)');
+            if (summary) summary.textContent = rule.summary;
+            if (details) {
+                details.replaceChildren(...rule.details.map((detail) => {
+                    const item = document.createElement('li');
+                    item.textContent = detail;
+                    return item;
+                }));
+            }
+        });
+    </script>
     <script src="js/script.js"></script>
 </body>
 </html>
